@@ -32,44 +32,12 @@ jobs:
           chmod 755 .venv/bin/activate
           source .venv/bin/activate
 
-      - name: Install R Packages Dependencies
-        run: |
-          R -f install-pkgs.R
-
-      - name: Install Schematic
+      - name: Install SynapseClient
         shell: bash
         run: |
           # has to activate each bash step
           source .venv/bin/activate
-          echo Installing pypi version of schematic
-          git clone --single-branch --branch main https://github.com/Sage-Bionetworks/schematic.git
-          cp schematic_config.yml schematic/config.yml
-          pip3 install schematicpy
-
-      - name: Set Configurations for Schematic
-        shell: bash
-        run: |
-          # write out configuration files using github secrets
-          echo "${{ secrets.SCHEMATIC_SYNAPSE_CONFIG }}" > .synapseConfig
-          echo "${{ secrets.SCHEMATIC_CREDS_PATH }}" > credentials.json
-          echo "${{ secrets.SCHEMATIC_TOKEN_PICKLE }}" | base64 -d > token.pickle
-
-      - name: Save service account credentials for Schematic
-        id: create-json
-        uses: jsdaniell/create-json@1.1.2
-        with:
-          name: 'schematic_service_account_creds.json'
-          json: ${{ secrets.SCHEMATIC_SERVICE_ACCT_CREDS }}
-
-      - name: Set Configurations for Data Model
-        shell: bash
-        run: |
-          source .venv/bin/activate
-          # download the data models and create config.json
-          python3 .github/config_schema.py \
-            -c schematic_config.yml \
-            --service_repo 'Sage-Bionetworks/schematic' \
-            --overwrite
+          pip3 install synapseclient
 
       - name: zip virtual env
         shell: bash
@@ -80,7 +48,11 @@ jobs:
           zip -rm .venv.zip .venv
 
       # Install R dependencies
-      - uses: r-lib/actions/setup-renv@v2
+      # - uses: r-lib/actions/setup-renv@v2
+
+      - name: Install R Packages Dependencies
+        run: |
+          R -f install-pkgs.R
 
       - name: Authorize and deploy app
         shell: Rscript {0}
