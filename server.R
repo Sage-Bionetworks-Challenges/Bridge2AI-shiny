@@ -5,7 +5,6 @@
 # using the session token.  https://www.synapse.org
 
 shinyServer(function(input, output, session) {
-    options(shiny.reactlog = TRUE)
     params <- parseQueryString(isolate(session$clientData$url_search))
     if (!has_auth_code(params)) {
         return()

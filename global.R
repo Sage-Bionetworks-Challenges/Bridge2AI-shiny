@@ -1,20 +1,17 @@
 suppressPackageStartupMessages({
-    library(yaml)
     library(reticulate)
     library(httr)
     library(shiny)
+    library(jsonlite)
+    library(dotenv)
 })
 
 ## Set Up OAuth
-oauth_client <- yaml.load_file("oauth_config.yaml")
-
-client_id <- toString(oauth_client$CLIENT_ID)
-client_secret <- toString(oauth_client$CLIENT_SECRET)
-app_url <- toString(oauth_client$APP_URL)
-
-if (is.null(client_id) || nchar(client_id) == 0) stop("oauth_config.yml is missing CLIENT_ID")
-if (is.null(client_secret) || nchar(client_secret) == 0) stop("oauth_config.yml is missing CLIENT_SECRET")
-if (is.null(app_url) || nchar(app_url) == 0) stop("oauth_config.yml is missing APP_URL")
+stopifnot(
+    !is.null(client_id <- Sys.getenv("CLIENT_ID")) && nchar(client_id) > 0,
+    !is.null(client_secret <- Sys.getenv("CLIENT_SECRET")) && nchar(client_secret) > 0,
+    !is.null(app_url <- Sys.getenv("APP_URL")) && nchar(app_url) > 0
+)
 
 # update port if running app locally
 if (interactive()) {

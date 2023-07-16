@@ -50,3 +50,5 @@ rsconnect/
 
 # Others
 .env
+.venv
+oauth_config.yaml
