@@ -3,7 +3,6 @@ suppressPackageStartupMessages({
     library(httr)
     library(shiny)
     library(jsonlite)
-    library(dotenv)
 })
 
 ## Set Up OAuth
