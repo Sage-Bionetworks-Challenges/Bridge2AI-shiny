@@ -70,7 +70,7 @@ jobs:
             CLIENT_SECRET = "${{ secrets.OAUTH_CLIENT_SECRET }}",
             APP_URL = appUrl
           )
-          dotenv_save(env_vars, path = ".env")
+          dotenv::dotenv_save(env_vars, path = ".env")
 
           # Deploy the app to shinyapps.io
           apps <- rsconnect::applications()$name
