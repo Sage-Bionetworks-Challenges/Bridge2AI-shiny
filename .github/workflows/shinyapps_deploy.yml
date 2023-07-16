@@ -64,6 +64,7 @@ jobs:
           rsconnect::setAccountInfo(rsConnectUser, rsConnectToken, rsConnectSecret)
 
           # create config file for OAuth
+          appUrl <- sprintf("https://%s.shinyapps.io/%s", rsConnectUser, "bridgeai-challenge")
           env_vars <- list(
             CLIENT_ID = "${{ secrets.OAUTH_CLIENT_ID }}",
             CLIENT_SECRET = "${{ secrets.OAUTH_CLIENT_SECRET }}",
@@ -72,7 +73,6 @@ jobs:
           dotenv_save(env_vars, path = ".env")
 
           # Deploy the app to shinyapps.io
-          message(sprintf("Deploying to %s ...", appName))
           apps <- rsconnect::applications()$name
           if (appName %in% apps) {
             rsconnect::configureApp(appName = appName, size = "xxxlarge", logLevel = "verbose")
@@ -81,3 +81,5 @@ jobs:
             rsconnect::deployApp(appName = appName)
             rsconnect::configureApp(appName = appName, size = "xxxlarge", logLevel = "verbose")
           }
+
+          message("\u2705 Deployed to ", appUrl)
