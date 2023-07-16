@@ -73,7 +73,7 @@ jobs:
           )
           env_lines <- paste0(names(env_vars), "=", env_vars)
 
-          write(env_lines, file = ".env", append = TRUE)
+          write(env_lines, file = ".Renviron", append = TRUE)
 
           # Deploy the app to shinyapps.io
           apps <- rsconnect::applications()$name
