@@ -1,0 +1,29 @@
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.icon-button {
+    display: inline-flex;
+    align-items: center;
+
+    img {
+        margin-right: 1em;
+    }
+}
+
+.dashboard-user {
+  small {
+    font-style: italic;
+  }
+  
+  .user-body {
+    @extend .flex-center
+  }
+}

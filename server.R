@@ -5,35 +5,66 @@
 # using the session token.  https://www.synapse.org
 
 shinyServer(function(input, output, session) {
-    params <- parseQueryString(isolate(session$clientData$url_search))
-    if (!has_auth_code(params)) {
-        return()
-    }
-    redirect_url <- paste0(
-        api$access, "?", "redirect_uri=", app_url, "&grant_type=",
-        "authorization_code", "&code=", params$code
-    )
-    # get the access_token and userinfo token
-    req <- POST(redirect_url, encode = "form", body = "", authenticate(app$key, app$secret,
-        type = "basic"
-    ), config = list())
-    # Stop the code if anything other than 2XX status code is returned
-    stop_for_status(req, task = "get an access token")
-    token_response <- content(req, type = NULL)
-    access_token <- token_response$access_token
-
-    session$userData$access_token <- access_token
-
-    ######## Initiate Login Process ########
-    # synapse cookies
-    session$sendCustomMessage(type = "readCookie", message = list())
-
-    # initial loading page
-    observeEvent(input$cookie, {
-
-        # login and update session
-        access_token <- session$userData$access_token
-
-        syn$login(authToken = access_token, rememberMe = FALSE)
+    # params <- parseQueryString(isolate(session$clientData$url_search))
+    # if (!has_auth_code(params)) {
+    #     return()
+    # }
+    # redirect_url <- paste0(
+    #     api$access, "?", "redirect_uri=", app_url, "&grant_type=",
+    #     "authorization_code", "&code=", params$code
+    # )
+    # # get the access_token and userinfo token
+    # req <- POST(redirect_url, encode = "form", body = "", authenticate(app$key, app$secret,
+    #     type = "basic"
+    # ), config = list())
+    # # Stop the code if anything other than 2XX status code is returned
+    # stop_for_status(req, task = "get an access token")
+    # token_response <- content(req, type = NULL)
+    # access_token <- token_response$access_token
+    # 
+    # session$userData$access_token <- access_token
+    # 
+    # ######## Initiate Login Process ########
+    # # synapse cookies
+    # session$sendCustomMessage(type = "readCookie", message = list())
+    
+    output$user <- renderUser({
+      dashboardUser(
+        name = "Awesome user",
+        image = "https://img.icons8.com/?size=512&id=39084&format=png",
+        subtitle = "@user",
+        fluidRow(
+          tagList(
+            tags$div(
+                id = "certified",
+                class = "icon-button",
+                tags$img(src = "img/synapse_logo.svg", height = "32px", width = "32px"),
+                span("Synapse Certified")
+            )),
+            tags$hr(
+              style = "border-top: 1px solid #000000; width: 100%;"
+            ),
+            tagList(
+              tags$div(
+                id = "team",
+                class = "icon-button",
+                tags$img(src = "https://img.icons8.com/?size=512&id=11901&format=png", height = "32px", width = "32px"),
+                span("Awesome Team")
+              ))
+        )
+      )
     })
+    
+    
+    # initial loading page
+    # observeEvent(input$cookie, {
+    # 
+    #     # login and update session
+    #     access_token <- session$userData$access_token
+    # 
+    #     syn$login(authToken = access_token, rememberMe = FALSE)
+    #     
+    #     
+    # 
+    # })
 })
