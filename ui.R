@@ -1,13 +1,46 @@
 ui = dashboardPage(
  title = "Bridge2AI",
- header = dashboardHeader(userOutput("user"),
-                 title = "Bridge2AI"),
+ header = dashboardHeader(
+   title = "Bridge2AI",
+   userOutput("user")
+ ),
  sidebar = dashboardSidebar(disable = TRUE, collapsed = TRUE, minified = FALSE),
  body = dashboardBody(
     tags$head(
       tags$style(sass(sass_file("www/scss/main.scss"))),
       tags$script(htmlwidgets::JS("setTimeout(function(){history.pushState({}, 'Bridge2AI', window.location.pathname);},2000);"))
     ),
+    fluidRow(
+      class = "flowbar-container",
+      column(width = 2),
+      column(
+        width = 8,
+        div(
+          class = "flowbar",
+          div(class = "flowbar-box",
+              tagList(
+                div(class = "flowbar-img"),
+                span(class = "flowbar-text", "Challenge")
+              )),
+          div(class = "flowbar-box",
+              tagList(
+                div(class = "flowbar-img"),
+                span(class = "flowbar-text", "Color")
+              )),
+          div(class = "flowbar-box",
+              tagList(
+                div(class = "flowbar-img"),
+                span(class = "flowbar-text", "Survey")
+              )),
+          div(class = "flowbar-box",
+              tagList(
+                div(class = "flowbar-img"),
+                span(class = "flowbar-text", "Review & Submit")
+              ))
+        )
+      ),
+      column(width = 2),
+    )
   )
 )
 
