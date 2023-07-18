@@ -45,6 +45,7 @@
      @extend .flex-center;
      flex-direction: column;
      gap: 16px;
+     height: 100px; // define height used to calculate margin-top for tab-content
      
     .flowbar-img {
       height: 64px;
@@ -65,3 +66,9 @@
         top: 100px;
       }
     }
+    
+// 
+.tab-content {
+  margin-top: 148px; // 100 + 24 * 2
+  padding: 48px 0;
+}

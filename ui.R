@@ -4,7 +4,16 @@ ui = dashboardPage(
    title = "Bridge2AI",
    userOutput("user")
  ),
- sidebar = dashboardSidebar(disable = TRUE, collapsed = TRUE, minified = FALSE),
+ sidebar = dashboardSidebar(
+   disable = TRUE, collapsed = TRUE, minified = FALSE,
+   sidebarMenu(
+     id = "tabs",
+     menuItem("", tabName = "tab1"),
+     menuItem("", tabName = "tab2"),
+     menuItem("", tabName = "tab3"),
+     menuItem("", tabName = "tab4")
+   )
+  ),
  body = dashboardBody(
     tags$head(
       tags$style(sass(sass_file("www/scss/main.scss"))),
@@ -39,7 +48,37 @@ ui = dashboardPage(
               ))
         )
       ),
-      column(width = 2),
+      column(width = 2)
+    ),
+    fluidPage(
+      tabItems(
+        tabItem(
+          tabName = "tab1",
+          fluidRow(
+            column(
+              width = 12, align = "center",
+              p("This is Challenge description"))
+          )
+        ),
+        tabItem(
+          tabName = "tab2",
+          fluidRow(
+            p("tab2")
+          )
+        ),
+        tabItem(
+          tabName = "tab2",
+          fluidRow(
+            p("tab3")
+          )
+        ),
+        tabItem(
+          tabName = "tab2",
+          fluidRow(
+            p("tab4")
+          )
+        )
+      )
     )
   )
 )
