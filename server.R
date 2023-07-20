@@ -103,17 +103,22 @@ shinyServer(function(input, output, session) {
       }
     })
       
-    
+    data(diamonds)
     output[["option-a-plot"]] <- renderPlot({
-      ggplot(mtcars, aes(x = mpg, y = wt)) +
+      ggplot(diamonds, aes(x = carat, y = price, color = color)) +
         geom_point() +
-        labs(x = "Miles per Gallon (mpg)", y = "Weight (1000 lbs)")
+        scale_color_manual(values = inferno(nlevels(diamonds$color))) +
+        labs(x = "Carat", y = "Price") +
+        theme_minimal(base_size = 16) +
+        theme(legend.position = "top")
     })
     
     output[["option-b-plot"]] <- renderPlot({
-      ggplot(mtcars, aes(x = mpg, y = wt)) +
+      ggplot(diamonds, aes(x = carat, y = price, color = color)) +
         geom_point() +
-        labs(x = "Miles per Gallon (mpg)", y = "Weight (1000 lbs)")
+        labs(x = "Carat", y = "Price") +
+        theme_minimal(base_size = 16) +
+        theme(legend.position = "top")
     })
     # initial loading page
     # observeEvent(input$cookie, {

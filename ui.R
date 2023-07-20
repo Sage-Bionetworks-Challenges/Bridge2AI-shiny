@@ -97,7 +97,7 @@ ui <- dashboardPage(
                     width = 6,
                     tagList(
                       plotOutput("option-a-plot"),
-                      h2("A", id = "option-a-text")
+                      span("A", id = "option-a-text")
                     )
                   ),
                   div(class = "vs-cycle", "VS"),
@@ -106,7 +106,7 @@ ui <- dashboardPage(
                     width = 6,
                     tagList(
                       plotOutput("option-b-plot"),
-                      h2("B", id = "option-b-text")
+                      span("B", id = "option-b-text")
                     )
                   )
                 ),

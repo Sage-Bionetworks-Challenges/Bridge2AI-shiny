@@ -12,6 +12,7 @@ suppressPackageStartupMessages({
   library(shinydashboardPlus)
   library(ggplot2)
   library(stringr)
+  library(viridis)  # Load the 'viridis' package for the 'inferno' color palette
 })
 
 # ## Set Up OAuth
