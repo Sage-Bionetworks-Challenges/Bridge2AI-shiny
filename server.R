@@ -53,9 +53,68 @@ shinyServer(function(input, output, session) {
               ))
         )
       )
+      
+    })
+    
+    updateTabsetPanel(session, "tabs", selected = "tab2")
+    
+    onevent("hover", "option-a-box", {
+      toggleClass("option-a-box", "option-a-hover")
+    })
+
+    onevent("hover", "option-b-box", {
+      toggleClass("option-b-box", "option-b-hover")
+    })
+    # onevent("mouseleave", "option-b-box", {
+    #   toggleClass("option-b-box", "option-b-shadow")
+    # })
+
+    selected_option <- reactiveVal(0)
+    
+    onevent("click", "option-a-box", {
+      toggleClass("option-a-box", "option-a-selected")
+      removeClass("option-b-box", "option-b-selected")
+      
+      runjs("var is_a = $('#option-a-box').hasClass('option-a-selected'); 
+             if (is_a) Shiny.onInputChange('selected_option', 'A')
+             else Shiny.onInputChange('selected_option', null);")
+    })
+    
+    onevent("click", "option-b-box", {
+      toggleClass("option-b-box", "option-b-selected")
+      removeClass("option-a-box", "option-a-selected")
+      runjs("var is_b = $('#option-b-box').hasClass('option-b-selected'); 
+             if (is_b) Shiny.onInputChange('selected_option', 'B')
+             else Shiny.onInputChange('selected_option', null);")
     })
     
     
+    output$`selected-option-text` <- renderUI({
+      if (!is.null(input$selected_option)) {
+        option_color <- ifelse(input$selected_option == "A", "option-a-color",  "option-b-color")
+        tagList(
+          p("🎉 Woo-hoo! You've chosen option ",
+            span(
+              class = option_color,
+              input$selected_option
+            )
+          )
+        )
+      }
+    })
+      
+    
+    output[["option-a-plot"]] <- renderPlot({
+      ggplot(mtcars, aes(x = mpg, y = wt)) +
+        geom_point() +
+        labs(x = "Miles per Gallon (mpg)", y = "Weight (1000 lbs)")
+    })
+    
+    output[["option-b-plot"]] <- renderPlot({
+      ggplot(mtcars, aes(x = mpg, y = wt)) +
+        geom_point() +
+        labs(x = "Miles per Gallon (mpg)", y = "Weight (1000 lbs)")
+    })
     # initial loading page
     # observeEvent(input$cookie, {
     # 

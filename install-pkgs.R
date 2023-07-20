@@ -9,6 +9,7 @@ cran <- c(
     "bslib",
     "waiter",
     "dplyr",
+    "stringr",
     "sass"
 )
 

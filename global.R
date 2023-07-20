@@ -10,6 +10,8 @@ suppressPackageStartupMessages({
   library(sass)
   library(shinydashboard)
   library(shinydashboardPlus)
+  library(ggplot2)
+  library(stringr)
 })
 
 # ## Set Up OAuth
