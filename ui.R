@@ -45,7 +45,7 @@ ui <- dashboardPage(
             class = "flowbar-box",
             tagList(
               div(class = "flowbar-img"),
-              span(class = "flowbar-text", "Survey")
+              span(class = "flowbar-text", "Q & A")
             )
           ),
           div(
@@ -72,7 +72,6 @@ ui <- dashboardPage(
         ),
         tabItem(
           tabName = "tab2",
-          br(), br(),
           fluidRow(
             column(
               align = "center",
@@ -124,13 +123,43 @@ ui <- dashboardPage(
           )
         ),
         tabItem(
-          tabName = "tab2",
+          tabName = "tab3",
           fluidRow(
-            p("tab3")
+            column(width = 1),
+            column(
+              width = 10,
+              align = "center",
+              plotOutput("tab3-plot")
+            ),
+            column(width = 1)
+          ),
+          br(),
+          fluidRow(
+            column(
+              width = 12,
+              align = "center",
+              span(
+                class = "ab-test-title",
+                "Choose the best color: "
+              )
+            )
+          ),
+          fluidRow(
+            column(width = 1),
+            column(
+              width = 10,
+              align = "center",
+              radioButtons("color-options", label = "\n",
+                             choices = names(ggsci:::ggsci_db), inline = TRUE)
+              # br(),
+              # h4("Question 2:"),
+              # colourpicker::colourInput("col", label = "\n", closeOnClick = TRUE),
+            ),
+            column(width = 1)
           )
         ),
         tabItem(
-          tabName = "tab2",
+          tabName = "tab4",
           fluidRow(
             p("tab4")
           )

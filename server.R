@@ -56,7 +56,7 @@ shinyServer(function(input, output, session) {
       
     })
     
-    updateTabsetPanel(session, "tabs", selected = "tab2")
+    updateTabsetPanel(session, "tabs", selected = "tab3")
     
     onevent("hover", "option-a-box", {
       toggleClass("option-a-box", "option-a-hover")
@@ -69,8 +69,6 @@ shinyServer(function(input, output, session) {
     #   toggleClass("option-b-box", "option-b-shadow")
     # })
 
-    selected_option <- reactiveVal(0)
-    
     onevent("click", "option-a-box", {
       toggleClass("option-a-box", "option-a-selected")
       removeClass("option-b-box", "option-b-selected")
@@ -120,6 +118,17 @@ shinyServer(function(input, output, session) {
         theme_minimal(base_size = 16) +
         theme(legend.position = "top")
     })
+    
+   
+    output$`tab3-plot` <- renderPlot({
+      ggplot(diamonds, aes(x = carat, y = price, color = color)) +
+        geom_point() +
+        scale_color_manual(values = as.character(ggsci:::ggsci_db[[input$`color-options`]][[1]])) +
+        labs(x = "Carat", y = "Price") +
+        theme_minimal(base_size = 16) +
+        theme(legend.position = "top")
+    })
+    
     # initial loading page
     # observeEvent(input$cookie, {
     # 

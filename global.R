@@ -13,6 +13,7 @@ suppressPackageStartupMessages({
   library(ggplot2)
   library(stringr)
   library(viridis)  # Load the 'viridis' package for the 'inferno' color palette
+  library(ggsci)
 })
 
 # ## Set Up OAuth
@@ -89,3 +90,4 @@ reticulate::use_virtualenv(file.path(getwd(), ".venv"), required = TRUE)
 
 # import synapse client
 syn <- import("synapseclient")$Synapse()
+
