@@ -56,7 +56,10 @@ shinyServer(function(input, output, session) {
       
     })
     
-    updateTabsetPanel(session, "tabs", selected = "tab3")
+    observeEvent(input$`to-tabs`, {
+      updateTabsetPanel(session, "tabs", selected = input$`to-tabs`)
+    })
+    
     
     onevent("hover", "option-a-box", {
       toggleClass("option-a-box", "option-a-hover")

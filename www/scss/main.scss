@@ -50,6 +50,17 @@
      flex-direction: column;
      gap: 16px;
      height: 100px; // define height used to calculate margin-top for tab-content
+     cursor: pointer;
+     
+     &:hover {
+        .flowbar-img {
+          box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+
+       .flowbar-text {
+         text-decoration: underline;
+      }
+     }
      
     .flowbar-img {
       height: 64px;

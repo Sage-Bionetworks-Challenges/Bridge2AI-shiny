@@ -29,6 +29,7 @@ ui <- dashboardPage(
           class = "flowbar",
           div(
             class = "flowbar-box",
+            onclick = "Shiny.onInputChange('to-tabs', 'tab1');",
             tagList(
               div(class = "flowbar-img"),
               span(class = "flowbar-text", "Challenge")
@@ -36,6 +37,7 @@ ui <- dashboardPage(
           ),
           div(
             class = "flowbar-box",
+            onclick = "Shiny.onInputChange('to-tabs', 'tab2');",
             tagList(
               div(class = "flowbar-img"),
               span(class = "flowbar-text", "A/B Test")
@@ -43,6 +45,7 @@ ui <- dashboardPage(
           ),
           div(
             class = "flowbar-box",
+            onclick = "Shiny.onInputChange('to-tabs', 'tab3');",
             tagList(
               div(class = "flowbar-img"),
               span(class = "flowbar-text", "Q & A")
@@ -50,6 +53,7 @@ ui <- dashboardPage(
           ),
           div(
             class = "flowbar-box",
+            onclick = "Shiny.onInputChange('to-tabs', 'tab4');",
             tagList(
               div(class = "flowbar-img"),
               span(class = "flowbar-text", "Review & Submit")
