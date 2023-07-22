@@ -28,6 +28,11 @@ shinyServer(function(input, output, session) {
     # # synapse cookies
     # session$sendCustomMessage(type = "readCookie", message = list())
     
+    tab1_answer <- reactiveVal(NULL)
+    tab2_answer <- reactiveVal(NULL)
+    tab3_answer <- reactiveVal(NULL)
+    tab4_answer <- reactiveVal(NULL)
+    
     output$user <- renderUser({
       dashboardUser(
         name = "Awesome user",
@@ -56,10 +61,58 @@ shinyServer(function(input, output, session) {
       
     })
     
-    observeEvent(input$`to-tabs`, {
-      updateTabsetPanel(session, "tabs", selected = input$`to-tabs`)
+    # observeEvent(input$`to-tabs`, {
+    #   if (input$`to-tabs` != "tab1") tab1_answer(1)
+    #   updateTabsetPanel(session, "tabs", selected = input$`to-tabs`)
+    # })
+
+    observeEvent(input$tabs, {
+      if (input$tabs != "tab1") addClass("step-1", "completed-step")
+      updateTabsetPanel(session, "tabs", selected = input$tabs)
     })
     
+    observeEvent(input$`next-btn-1`, {
+      addClass("step-1", "completed-step")
+      updateTabsetPanel(session, "tabs", selected = "tab2")
+    })
+    observeEvent(input$`next-btn-2`, {
+      if (!is.null(input$selected_option)) {
+        addClass("step-2", "completed-step")
+        updateTabsetPanel(session, "tabs", selected = "tab3")
+      } else {
+        removeClass("step-2", "completed-step")
+      }
+    })
+       observeEvent(input$`next-btn-3`, {
+      if (!is.null(input$`color-options`)) {
+        addClass("step-3", "completed-step")
+        updateTabsetPanel(session, "tabs", selected = "tab4")
+      } else {
+        removeClass("step-3", "completed-step")
+      }
+    })
+    observeEvent(input$`next-btn-4`, {
+    
+    })
+    # observeEvent(tab1_answer(), ignoreNULL = TRUE, {
+    #   addClass("flowbar-1", "selected-step")
+    # })
+    # 
+    # observeEvent(input$selected_option, ignoreNULL = FALSE, {
+    #    if (is.null(input$selected_option)) {
+    #      removeClass("flowbar-2", "selected-step")
+    #    } else {
+    #      addClass("flowbar-2", "selected-step")
+    #    }
+    # })
+    # 
+    # observeEvent(input$`color-options`, ignoreNULL = FALSE, ignoreInit = TRUE, {
+    #   if (is.null(input$`color-options`)) {
+    #     removeClass("flowbar-3", "selected-step")
+    #   } else {
+    #     addClass("flowbar-3", "selected-step")
+    #   }
+    # })
     
     onevent("hover", "option-a-box", {
       toggleClass("option-a-box", "option-a-hover")

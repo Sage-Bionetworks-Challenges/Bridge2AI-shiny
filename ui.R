@@ -21,42 +21,42 @@ ui <- dashboardPage(
     ),
     useShinyjs(),
     fluidRow(
-      class = "flowbar-container",
+      class = "steps-container",
       column(width = 2),
       column(
         width = 8,
         div(
-          class = "flowbar",
+          class = "steps",
           div(
-            class = "flowbar-box",
-            onclick = "Shiny.onInputChange('to-tabs', 'tab1');",
+            class = "step-box",
+            onclick = "Shiny.onInputChange('tabs', 'tab1');",
             tagList(
-              div(class = "flowbar-img"),
-              span(class = "flowbar-text", "Challenge")
+              div(id = "step-1", class = "step-img"),
+              span(class = "step-text", "Challenge")
             )
           ),
           div(
-            class = "flowbar-box",
-            onclick = "Shiny.onInputChange('to-tabs', 'tab2');",
+            class = "step-box",
+            onclick = "Shiny.onInputChange('tabs', 'tab2');",
             tagList(
-              div(class = "flowbar-img"),
-              span(class = "flowbar-text", "A/B Test")
+              div(id = "step-2", class = "step-img"),
+              span(class = "step-text", "A/B Test")
             )
           ),
           div(
-            class = "flowbar-box",
-            onclick = "Shiny.onInputChange('to-tabs', 'tab3');",
+            class = "step-box",
+            onclick = "Shiny.onInputChange('tabs', 'tab3');",
             tagList(
-              div(class = "flowbar-img"),
-              span(class = "flowbar-text", "Q & A")
+              div(id = "step-3", class = "step-img"),
+              span(class = "step-text", "Q & A")
             )
           ),
           div(
-            class = "flowbar-box",
-            onclick = "Shiny.onInputChange('to-tabs', 'tab4');",
+            class = "step-box",
+            onclick = "Shiny.onInputChange('tabs', 'tab4');",
             tagList(
-              div(class = "flowbar-img"),
-              span(class = "flowbar-text", "Review & Submit")
+              div(id = "step-4", class = "step-img"),
+              span(class = "step-text", "Review & Submit")
             )
           )
         )
@@ -72,7 +72,8 @@ ui <- dashboardPage(
               width = 12, align = "center",
               p("This is Challenge description")
             )
-          )
+          ),
+          actionButton("next-btn-1", "Next", class = "next-btn")
         ),
         tabItem(
           tabName = "tab2",
@@ -124,7 +125,8 @@ ui <- dashboardPage(
               width = 12,
               uiOutput("selected-option-text")
             )
-          )
+          ),
+          actionButton("next-btn-2", "Save & Next", class = "next-btn")
         ),
         tabItem(
           tabName = "tab3",
@@ -153,20 +155,22 @@ ui <- dashboardPage(
             column(
               width = 10,
               align = "center",
-              radioButtons("color-options", label = "\n",
-                             choices = names(ggsci:::ggsci_db), inline = TRUE)
+              radioButtons("color-options", label = "\n", inline = TRUE,
+                           choices = names(ggsci:::ggsci_db))
               # br(),
               # h4("Question 2:"),
               # colourpicker::colourInput("col", label = "\n", closeOnClick = TRUE),
             ),
             column(width = 1)
-          )
+          ),
+          actionButton("next-btn-3", "Save & Next", class = "next-btn")
         ),
         tabItem(
           tabName = "tab4",
           fluidRow(
             p("tab4")
-          )
+          ),
+          actionButton("next-btn-4", "Submit", class = "next-btn")
         )
       )
     )
