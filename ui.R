@@ -77,7 +77,7 @@ ui <- dashboardPage(
           column(
             width = 12,
             align = "center",
-            actionButton("next-btn-4", "Next", class = "next-btn")
+            actionButton("next-btn-1", "Next", class = "next-btn")
           )
         ),
         tabItem(
@@ -124,7 +124,7 @@ ui <- dashboardPage(
           column(
             width = 12,
             align = "center",
-            actionButton("next-btn-4", "Save & Next", class = "next-btn")
+            actionButton("next-btn-2", "Save & Next", class = "next-btn")
           )
         ),
         tabItem(
@@ -158,7 +158,7 @@ ui <- dashboardPage(
           column(
             width = 12,
             align = "center",
-            actionButton("next-btn-4", "Save & Next", class = "next-btn")
+            actionButton("next-btn-3", "Save & Next", class = "next-btn")
           )
         ),
         tabItem(

@@ -18,15 +18,93 @@
     }
 }
 
-.dashboard-user {
-  small {
-    font-style: italic;
+$navbar-bg-color: #f0f0f0;
+$navbar-text-color: #000;
+
+.skin-blue .main-header {
+  z-index: 1034;
+  height: 80px;
+  background-color: $navbar-bg-color;
+
+  .navbar {
+    color: $navbar-text-color;
+    background-color: $navbar-bg-color;
+    height: 80px;
+    border-bottom: 3px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 16px;
+    
+    .nav>li>a, .nav .open>a {
+      color: $navbar-text-color !important;
+      background-color: $navbar-bg-color !important;
+      border-radius: 2em !important;
+      border: none !important;
+    }
+
+    .nav>li>a {
+      &:hover {
+        box-shadow: 6px 6px 12px #c5c5c5,
+        -6px -6px 12px #fff;
+      }
+    }
+
+    .nav .open>a {
+      box-shadow: inset 4px 4px 12px #c5c5c5,
+        inset -4px -4px 12px #fff !important;
+    }
   }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $navbar-text-color;
+    background-color: $navbar-bg-color;
+    height: 80px;
+    border-bottom: 3px solid #dee2e6;
+    transition: all 200ms ease;
+    cursor: pointer;
+
+    &:hover {
+      font-weight: 600;
+      background-color: $navbar-bg-color;
+    }
+  }
+
+  .dashboard-user {
+    top: 65px;
+    box-shadow: 0 10px 10px rgba(#000, 0.1);
   
-  .user-body {
-    @extend .flex-center
+    .user-header {
+      background-color: $navbar-bg-color;
+
+      img {
+        border: 3px solid white !important;
+      }
+      
+      p {
+        color: $navbar-text-color !important;
+      }
+    }
+  
+    small {
+      font-style: italic;
+    }
+    
+    .user-body {
+      @extend .flex-center;
+
+      .icon-button {
+        text-decoration: underline;
+      }
+    }
+  
   }
 }
+
+
 
 .steps-container {
   padding: 0 50px;
@@ -240,9 +318,9 @@
   grid-gap: 10px;
 }
 
-.next-btn {
-    position: absolute;
-    bottom: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-}
+// .next-btn {
+//     position: absolute;
+//     bottom: 10%;
+//     left: 50%;
+//     transform: translateX(-50%);
+// }

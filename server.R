@@ -37,28 +37,14 @@ shinyServer(function(input, output, session) {
       dashboardUser(
         name = "Awesome user",
         image = "https://img.icons8.com/?size=512&id=39084&format=png",
-        subtitle = "@user",
-        fluidRow(
-          tagList(
-            tags$div(
-                id = "certified",
-                class = "icon-button",
-                tags$img(src = "img/synapse_logo.svg", height = "32px", width = "32px"),
-                span("Synapse Certified")
-            )),
-            tags$hr(
-              style = "border-top: 1px solid #000000; width: 100%;"
-            ),
-            tagList(
-              tags$div(
-                id = "team",
-                class = "icon-button",
-                tags$img(src = "https://img.icons8.com/?size=512&id=11901&format=png", height = "32px", width = "32px"),
-                span("Awesome Team")
-              ))
+        subtitle = "@awesome-user",
+        tags$div(
+          id = "team",
+          class = "icon-button",
+          tags$img(src = "https://img.icons8.com/?size=512&id=11901&format=png", height = "32px", width = "32px"),
+          if(TRUE) tags$a("Awesome team", href = "https://www.google.com", target = "_blank")
         )
       )
-      
     })
     
     ## TODO: make sure the tabs cannot be clicked until the plots are generated
