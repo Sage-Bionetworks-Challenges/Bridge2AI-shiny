@@ -67,28 +67,39 @@ shinyServer(function(input, output, session) {
     # })
 
     observeEvent(input$tabs, {
-      if (input$tabs != "tab1") addClass("step-1", "completed-step")
+      if (input$tabs != "tab1") addClass("step-1", "complete-step")
+      
+      lapply(1:4, function(i) {
+        tab_name <- paste0("tab", i)
+        step_box_id <- paste0("step-", i)
+        if (input$tabs == tab_name) {
+          addClass(step_box_id, "pop-step")
+        } else {
+          removeClass(step_box_id, "pop-step")
+        }
+      })
+      
       updateTabsetPanel(session, "tabs", selected = input$tabs)
     })
     
     observeEvent(input$`next-btn-1`, {
-      addClass("step-1", "completed-step")
+      addClass("step-1", "complete-step")
       updateTabsetPanel(session, "tabs", selected = "tab2")
     })
     observeEvent(input$`next-btn-2`, {
       if (!is.null(input$selected_option)) {
-        addClass("step-2", "completed-step")
+        addClass("step-2", "complete-step")
         updateTabsetPanel(session, "tabs", selected = "tab3")
       } else {
-        removeClass("step-2", "completed-step")
+        removeClass("step-2", "complete-step")
       }
     })
        observeEvent(input$`next-btn-3`, {
       if (!is.null(input$`color-options`)) {
-        addClass("step-3", "completed-step")
+        addClass("step-3", "complete-step")
         updateTabsetPanel(session, "tabs", selected = "tab4")
       } else {
-        removeClass("step-3", "completed-step")
+        removeClass("step-3", "complete-step")
       }
     })
     observeEvent(input$`next-btn-4`, {

@@ -22,72 +22,72 @@ ui <- dashboardPage(
     useShinyjs(),
     fluidRow(
       class = "steps-container",
-      column(width = 2),
-      column(
-        width = 8,
-        div(
-          class = "steps",
-          div(
-            class = "step-box",
-            onclick = "Shiny.onInputChange('tabs', 'tab1');",
-            tagList(
-              div(id = "step-1", class = "step-img"),
-              span(class = "step-text", "Challenge")
-            )
-          ),
-          div(
-            class = "step-box",
-            onclick = "Shiny.onInputChange('tabs', 'tab2');",
-            tagList(
-              div(id = "step-2", class = "step-img"),
-              span(class = "step-text", "A/B Test")
-            )
-          ),
-          div(
-            class = "step-box",
-            onclick = "Shiny.onInputChange('tabs', 'tab3');",
-            tagList(
-              div(id = "step-3", class = "step-img"),
-              span(class = "step-text", "Q & A")
-            )
-          ),
-          div(
-            class = "step-box",
-            onclick = "Shiny.onInputChange('tabs', 'tab4');",
-            tagList(
-              div(id = "step-4", class = "step-img"),
-              span(class = "step-text", "Review & Submit")
-            )
+      div(
+        class = "steps",
+        tags$section(
+          id = "step-1",
+          class = "step-box",
+          onclick = "Shiny.onInputChange('tabs', 'tab1');",
+          tagList(
+            icon("book-open-reader"),
+            span(class = "step-text", "Challenge")
+          )
+        ),
+        tags$section(
+          id = "step-2",
+          class = "step-box",
+          onclick = "Shiny.onInputChange('tabs', 'tab2');",
+          tagList(
+            icon("flask"),
+            span(class = "step-text", "A/B Test")
+          )
+        ),
+        tags$section(
+          id = "step-3",
+          class = "step-box",
+          onclick = "Shiny.onInputChange('tabs', 'tab3');",
+          tagList(
+            icon("list"),
+            span(class = "step-text", "Q & A")
+          )
+        ),
+        tags$section(
+          id = "step-4",
+          class = "step-box",
+          onclick = "Shiny.onInputChange('tabs', 'tab4');",
+          tagList(
+            icon("boxes-packing"),
+            span(class = "step-text", "Review & Submit")
           )
         )
-      ),
-      column(width = 2)
+      )
     ),
     fluidPage(
       tabItems(
         tabItem(
           tabName = "tab1",
-          fluidRow(
-            column(
-              width = 12, align = "center",
-              p("This is Challenge description")
-            )
+          h2("Bridge2AI Challenge", align = "center"),
+          p(
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eget orci et justo porttitor ullamcorper. Vestibulum tortor orci, dictum et justo eget, ultrices dapibus justo. Vestibulum elementum ante est, at commodo neque malesuada at. Quisque sit amet neque sodales, vestibulum diam quis, ultrices felis. Phasellus tincidunt magna eros. Quisque ultrices lectus et massa cursus consequat. Etiam ac arcu enim. Nunc vitae fermentum dolor, sed scelerisque enim. Morbi et lacus ut enim semper iaculis. Vivamus faucibus rutrum dolor vel vehicula. Proin facilisis erat augue, et laoreet sapien porttitor tincidunt. Suspendisse eleifend, lacus non elementum vehicula, eros nisl efficitur erat, ut molestie ante mauris in diam. Praesent laoreet nisi id pellentesque facilisis. In sit amet faucibus lacus.\n\n
+           Morbi feugiat tellus eget turpis rhoncus, sit amet eleifend arcu convallis. Mauris porttitor vel ante non commodo. Sed vehicula fermentum ex non tempus. Mauris vel egestas arcu. Etiam nec sapien pretium, iaculis ipsum vitae, dignissim dolor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae nulla dictum, accumsan ipsum non, porttitor massa. Maecenas consectetur ultricies metus at pulvinar. Sed convallis augue eget ullamcorper aliquet. Pellentesque erat lectus, laoreet vel tortor nec, porttitor euismod risus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cras orci nibh, efficitur vel est sit amet, eleifend semper leo. Fusce consequat elit elementum ipsum pulvinar, non consequat est posuere. Ut pharetra dui in sodales euismod. Aliquam placerat maximus dolor at aliquet.\n\n
+           Maecenas luctus neque id nulla blandit blandit. Cras consequat condimentum dictum. Aenean eu mattis justo. Proin gravida urna vel maximus aliquet. Suspendisse tincidunt dictum velit at pulvinar. Ut tincidunt massa tortor, vitae viverra ipsum pellentesque ac. Aenean laoreet varius turpis, eget consectetur elit rhoncus eu. Sed blandit volutpat ipsum, et congue mauris luctus accumsan. Ut ultricies velit vel pretium scelerisque. Praesent placerat orci in justo suscipit varius. Nulla facilisi. Praesent et arcu ut dui cursus rutrum."
           ),
           actionButton("next-btn-1", "Next", class = "next-btn")
         ),
         tabItem(
           tabName = "tab2",
-          fluidRow(
-            column(
-              align = "center",
-              class = "ab-test-title-box",
-              width = 12,
-              span(
-                class = "ab-test-title",
-                "Which plot is better?"
-              )
-            )
-          ),
+          # fluidRow(
+          #   column(
+          #     align = "center",
+          #     class = "ab-test-title-box",
+          #     width = 12,
+          #     span(
+          #       class = "ab-test-title",
+          #       "Which plot is better?"
+          #     )
+          #   )
+          # ),
+          h2("Which plot is better?", align = "center"),
           br(),
           fluidRow(
             column(width = 1),
