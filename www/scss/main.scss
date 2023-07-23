@@ -110,14 +110,14 @@ $navbar-text-color: #000;
   padding: 0 50px;
   background-color: white;
   border-radius: 1em;
-  box-shadow: 0 20px 25px 0 rgba(#000, 0.8),
+  box-shadow: 0 20px 25px 0 rgba(#000, 0.6),
     inset 0 -5px 10px rgba(#000, 0.3);
   margin: 48px;
 }
 
 .steps {
   position: relative;
-  height: 80px;
+  height: 64px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   justify-items: center;
@@ -125,7 +125,7 @@ $navbar-text-color: #000;
 
 .step-box {
   display: flex;
-  width: 80px;
+  width: 64px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -133,7 +133,7 @@ $navbar-text-color: #000;
   position: relative;
 
   i {
-    font-size: 32px;
+    font-size: 24px;
     transition: all 300ms linear;
     pointer-events: none;
     z-index: 1;
@@ -150,12 +150,12 @@ $navbar-text-color: #000;
 
   &::after {
     content: '';
-    width: 80px;
-    height: 80px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     position: absolute;
-    background: red;
-    border: 8px solid #000;
+    background-color: red;
+    border: 4px solid #000;
     box-shadow: inset 0 0 6px 0 #000;
     transition: all 300ms linear;
     opacity: 0;
@@ -168,7 +168,7 @@ $navbar-text-color: #000;
 
 .pop-step {
   i {
-    transform: translateY(-40px) !important;
+    transform: translateY(-32px) !important;
     color: white !important;
   }
 
@@ -179,7 +179,7 @@ $navbar-text-color: #000;
 
   &::after {
     opacity: 1 !important;
-    transform: translateY(-40px) !important;
+    transform: translateY(-32px) !important;
   }
 }
 
@@ -209,7 +209,7 @@ $navbar-text-color: #000;
 }
 
 .tab-content {
-  padding: 48px 16px 16px;
+  padding: 16px;
 }
 
 // tab2 
