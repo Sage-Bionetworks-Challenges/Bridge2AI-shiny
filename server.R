@@ -61,11 +61,10 @@ shinyServer(function(input, output, session) {
       
     })
     
-    # observeEvent(input$`to-tabs`, {
-    #   if (input$`to-tabs` != "tab1") tab1_answer(1)
-    #   updateTabsetPanel(session, "tabs", selected = input$`to-tabs`)
-    # })
-
+    ## TODO: make sure the tabs cannot be clicked until the plots are generated
+    # runjs("$('.step-box').attr('style', 'pointer-events: none;');")
+    # runjs("$('.step-box').removeAttr('style');")
+    
     observeEvent(input$tabs, {
       if (input$tabs != "tab1") addClass("step-1", "complete-step")
       
@@ -78,7 +77,6 @@ shinyServer(function(input, output, session) {
           removeClass(step_box_id, "pop-step")
         }
       })
-      
       updateTabsetPanel(session, "tabs", selected = input$tabs)
     })
     
@@ -105,26 +103,8 @@ shinyServer(function(input, output, session) {
     observeEvent(input$`next-btn-4`, {
     
     })
-    # observeEvent(tab1_answer(), ignoreNULL = TRUE, {
-    #   addClass("flowbar-1", "selected-step")
-    # })
-    # 
-    # observeEvent(input$selected_option, ignoreNULL = FALSE, {
-    #    if (is.null(input$selected_option)) {
-    #      removeClass("flowbar-2", "selected-step")
-    #    } else {
-    #      addClass("flowbar-2", "selected-step")
-    #    }
-    # })
-    # 
-    # observeEvent(input$`color-options`, ignoreNULL = FALSE, ignoreInit = TRUE, {
-    #   if (is.null(input$`color-options`)) {
-    #     removeClass("flowbar-3", "selected-step")
-    #   } else {
-    #     addClass("flowbar-3", "selected-step")
-    #   }
-    # })
     
+    ## tab2 plots effect
     onevent("hover", "option-a-box", {
       toggleClass("option-a-box", "option-a-hover")
     })
@@ -132,9 +112,6 @@ shinyServer(function(input, output, session) {
     onevent("hover", "option-b-box", {
       toggleClass("option-b-box", "option-b-hover")
     })
-    # onevent("mouseleave", "option-b-box", {
-    #   toggleClass("option-b-box", "option-b-shadow")
-    # })
 
     onevent("click", "option-a-box", {
       toggleClass("option-a-box", "option-a-selected")
@@ -196,6 +173,27 @@ shinyServer(function(input, output, session) {
         theme(legend.position = "top")
     })
     
+    
+    output$`q1-answer` <- renderText({
+      if (is.null(input$selected_option)) {
+        HTML("Please go to the 'A/B Test' to select your answer")
+      } else {
+         HTML(sprintf(
+           "Your have selected %s", dQuote(input$selected_option)
+         ))
+      }
+    })
+    
+    output$`q2-answer` <- renderText({
+      if (is.null(input$`color-options`)) {
+        HTML("Please go back the 'A/B Test' to select your answer")
+      } else {
+        HTML(sprintf(
+          "Your have selected %s", dQuote(input$`color-options`)
+        ))
+      }
+      
+    })
     # initial loading page
     # observeEvent(input$cookie, {
     # 

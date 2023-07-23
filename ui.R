@@ -67,26 +67,21 @@ ui <- dashboardPage(
         tabItem(
           tabName = "tab1",
           h2("Bridge2AI Challenge", align = "center"),
+          br(),
           p(
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eget orci et justo porttitor ullamcorper. Vestibulum tortor orci, dictum et justo eget, ultrices dapibus justo. Vestibulum elementum ante est, at commodo neque malesuada at. Quisque sit amet neque sodales, vestibulum diam quis, ultrices felis. Phasellus tincidunt magna eros. Quisque ultrices lectus et massa cursus consequat. Etiam ac arcu enim. Nunc vitae fermentum dolor, sed scelerisque enim. Morbi et lacus ut enim semper iaculis. Vivamus faucibus rutrum dolor vel vehicula. Proin facilisis erat augue, et laoreet sapien porttitor tincidunt. Suspendisse eleifend, lacus non elementum vehicula, eros nisl efficitur erat, ut molestie ante mauris in diam. Praesent laoreet nisi id pellentesque facilisis. In sit amet faucibus lacus.\n\n
            Morbi feugiat tellus eget turpis rhoncus, sit amet eleifend arcu convallis. Mauris porttitor vel ante non commodo. Sed vehicula fermentum ex non tempus. Mauris vel egestas arcu. Etiam nec sapien pretium, iaculis ipsum vitae, dignissim dolor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vitae nulla dictum, accumsan ipsum non, porttitor massa. Maecenas consectetur ultricies metus at pulvinar. Sed convallis augue eget ullamcorper aliquet. Pellentesque erat lectus, laoreet vel tortor nec, porttitor euismod risus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cras orci nibh, efficitur vel est sit amet, eleifend semper leo. Fusce consequat elit elementum ipsum pulvinar, non consequat est posuere. Ut pharetra dui in sodales euismod. Aliquam placerat maximus dolor at aliquet.\n\n
            Maecenas luctus neque id nulla blandit blandit. Cras consequat condimentum dictum. Aenean eu mattis justo. Proin gravida urna vel maximus aliquet. Suspendisse tincidunt dictum velit at pulvinar. Ut tincidunt massa tortor, vitae viverra ipsum pellentesque ac. Aenean laoreet varius turpis, eget consectetur elit rhoncus eu. Sed blandit volutpat ipsum, et congue mauris luctus accumsan. Ut ultricies velit vel pretium scelerisque. Praesent placerat orci in justo suscipit varius. Nulla facilisi. Praesent et arcu ut dui cursus rutrum."
           ),
-          actionButton("next-btn-1", "Next", class = "next-btn")
+          br(), br(), br(),
+          column(
+            width = 12,
+            align = "center",
+            actionButton("next-btn-4", "Next", class = "next-btn")
+          )
         ),
         tabItem(
           tabName = "tab2",
-          # fluidRow(
-          #   column(
-          #     align = "center",
-          #     class = "ab-test-title-box",
-          #     width = 12,
-          #     span(
-          #       class = "ab-test-title",
-          #       "Which plot is better?"
-          #     )
-          #   )
-          # ),
           h2("Which plot is better?", align = "center"),
           br(),
           fluidRow(
@@ -126,7 +121,11 @@ ui <- dashboardPage(
               uiOutput("selected-option-text")
             )
           ),
-          actionButton("next-btn-2", "Save & Next", class = "next-btn")
+          column(
+            width = 12,
+            align = "center",
+            actionButton("next-btn-4", "Save & Next", class = "next-btn")
+          )
         ),
         tabItem(
           tabName = "tab3",
@@ -140,16 +139,8 @@ ui <- dashboardPage(
             column(width = 1)
           ),
           br(),
-          fluidRow(
-            column(
-              width = 12,
-              align = "center",
-              span(
-                class = "ab-test-title",
-                "Choose the best color: "
-              )
-            )
-          ),
+          h2("Choose the best color: ", align = "center"),
+          br(),
           fluidRow(
             column(width = 1),
             column(
@@ -163,14 +154,47 @@ ui <- dashboardPage(
             ),
             column(width = 1)
           ),
-          actionButton("next-btn-3", "Save & Next", class = "next-btn")
+          br(), br(), br(),
+          column(
+            width = 12,
+            align = "center",
+            actionButton("next-btn-4", "Save & Next", class = "next-btn")
+          )
         ),
         tabItem(
           tabName = "tab4",
+          h2("Review and submit your answers", align = "center"),
           fluidRow(
-            p("tab4")
+            column(width = 2),
+            column(
+              width = 8,
+              align = "center",
+              tagList(
+                h3("Which plot is better:"),
+                htmlOutput("q1-answer")
+              )
+            ),
+            column(width = 2)
           ),
-          actionButton("next-btn-4", "Submit", class = "next-btn")
+          br(),
+          fluidRow(
+            column(width = 2),
+            column(
+              width = 8,
+              align = "center",
+              tagList(
+                h3("Choose the best color:"),
+                htmlOutput("q2-answer")
+              )
+            ),
+            column(width = 2)
+          ),
+          br(), br(), br(),
+          column(
+            width = 12,
+            align = "center",
+            actionButton("next-btn-4", "Submit", class = "next-btn")
+          )
         )
       )
     )
