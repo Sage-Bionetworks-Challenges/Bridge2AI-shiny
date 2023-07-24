@@ -5,7 +5,7 @@ on:
 
 jobs:
   pr:
-    runs-on: ubuntu-jammy
+    runs-on: ubuntu-latest
     # This image seems to be based on rocker/r-ver which in turn is based on debian
     container: rocker/rstudio:4.2.1
     env:
@@ -17,7 +17,7 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y pip python3.8-venv
+          sudo apt-get install -y pip python3.8-venv libpng-dev
 
       - uses: actions/checkout@v2
       - uses: r-lib/actions/setup-pandoc@v1
