@@ -47,7 +47,7 @@ jobs:
 
       - name: Test Running Shiny App
         run: |
-          Rscript -e "shiny::runApp()"
+          timeout 30 Rscript -e "shiny::runApp()"
 
       - name: Test Deployment of App
         if: ${{ contains(github.event.pull_request.changed_files, 'deploy.yml') }}
