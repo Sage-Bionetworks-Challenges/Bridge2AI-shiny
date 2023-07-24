@@ -1,18 +1,15 @@
 suppressPackageStartupMessages({
   library(reticulate)
   library(httr)
-  library(shiny)
+  library(rsconnect)
   library(jsonlite)
-  # library(bslib)
-  # library(waiter)
+  library(shiny)
   library(shinyjs)
-  # library(dplyr)
   library(sass)
   library(shinydashboard)
   library(shinydashboardPlus)
   library(ggplot2)
-  # library(stringr)
-  library(viridis) # Load the 'viridis' package for the 'inferno' color palette
+  library(viridis)
   library(ggsci)
 })
 

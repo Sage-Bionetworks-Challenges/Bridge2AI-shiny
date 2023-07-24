@@ -1,0 +1,61 @@
+name: ci
+
+on:
+  pull_request:
+
+jobs:
+  pr:
+    runs-on: ubuntu-latest
+    # This image seems to be based on rocker/r-ver which in turn is based on debian
+    container: rocker/rstudio:4.2.1
+    env:
+      # This should not be necessary for installing from public repo's however remotes::install_github() fails without it.
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      TEST_APP_NAME: bridgeai-challenge-test
+
+    steps:
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pip python3.8-venv libcurl4-openssl-dev libpng-dev
+
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-pandoc@v1
+
+      - name: Create and Activate Python Virtual Environment
+        shell: bash
+        run: |
+          python3 -m venv .venv
+          chmod 755 .venv/bin/activate
+          source .venv/bin/activate
+
+      - name: Install SynapseClient
+        shell: bash
+        run: |
+          # has to activate each bash step
+          source .venv/bin/activate
+          pip3 install synapseclient
+
+      - name: Install R Packages Dependencies
+        run: |
+          R -e "renv::restore(repos='https://packagemanager.rstudio.com/cran/__linux__/focal/latest')"
+
+      - name: Create Environment Variables File
+        run: |
+          echo "CLIENT_ID=${{ secrets.OAUTH_CLIENT_ID }}" >> .env
+          echo "CLIENT_SECRET=${{ secrets.OAUTH_CLIENT_SECRET }}" >> .env
+          echo "APP_URL=https://${{secrets.RSCONNECT_USER}}.shinyapps.io/${{ env.TEST_APP_NAME }}" >> .env
+
+      - name: Test Deployment of App
+        shell: Rscript {0}
+        run: |
+          # set up rsConnect credentials from secrets
+          rsconnect::setAccountInfo(
+            "${{ secrets.RSCONNECT_USER }}", 
+            "${{ secrets.RSCONNECT_TOKEN }}",
+            "${{ secrets.RSCONNECT_SECRET }}"
+          )
+          # Deploy the app to shinyapps.io
+          rsconnect::deployApp(appName = "${{ env.TEST_APP_NAME }}")
+          # Remove the app
+          # rsconnect::terminateApp(appName = "${{ env.TEST_APP_NAME }}")
