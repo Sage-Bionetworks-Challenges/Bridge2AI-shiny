@@ -65,7 +65,7 @@ jobs:
           rsconnect::setAccountInfo(rsConnectUser, rsConnectToken, rsConnectSecret)
 
           # create config file for OAuth
-          appName <- "bridgeai-challenge"
+          appName <- "bridgeai-challenge-staging"
           appUrl <- sprintf("https://%s.shinyapps.io/%s", rsConnectUser, appName)
           env_vars <- list(
             CLIENT_ID = "${{ secrets.OAUTH_CLIENT_ID }}",
