@@ -146,7 +146,7 @@ ui <- dashboardPage(
             column(
               width = 10,
               align = "center",
-              radioButtons("color-options", label = "\n", inline = TRUE,
+              radioButtons("tab3_answer", label = "\n", inline = TRUE,
                            choices = names(ggsci:::ggsci_db))
               # br(),
               # h4("Question 2:"),

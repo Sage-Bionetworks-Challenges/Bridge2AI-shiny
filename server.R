@@ -27,12 +27,7 @@ shinyServer(function(input, output, session) {
     # ######## Initiate Login Process ########
     # # synapse cookies
     # session$sendCustomMessage(type = "readCookie", message = list())
-    
-    tab1_answer <- reactiveVal(NULL)
-    tab2_answer <- reactiveVal(NULL)
-    tab3_answer <- reactiveVal(NULL)
-    tab4_answer <- reactiveVal(NULL)
-    
+
     output$user <- renderUser({
       dashboardUser(
         name = "Awesome user",
@@ -71,20 +66,25 @@ shinyServer(function(input, output, session) {
       updateTabsetPanel(session, "tabs", selected = "tab2")
     })
     observeEvent(input$`next-btn-2`, {
-      if (!is.null(input$selected_option)) {
+      if (!is.null(input$tab2_answer)) {
         addClass("step-2", "complete-step")
         updateTabsetPanel(session, "tabs", selected = "tab3")
       } else {
-        removeClass("step-2", "complete-step")
+        shiny::showNotification(
+          "Please select an answer!",
+          type = "error",
+          duration = 5
+        )
       }
     })
-       observeEvent(input$`next-btn-3`, {
-      if (!is.null(input$`color-options`)) {
-        addClass("step-3", "complete-step")
-        updateTabsetPanel(session, "tabs", selected = "tab4")
-      } else {
-        removeClass("step-3", "complete-step")
-      }
+    observeEvent(input$tab2_answer, ignoreNULL = FALSE, {
+      if(is.null(input$tab2_answer)) removeClass("step-2", "complete-step")
+    })
+      
+    observeEvent(input$`next-btn-3`, {
+      req(input$tab3_answer)
+      addClass("step-3", "complete-step")
+      updateTabsetPanel(session, "tabs", selected = "tab4")
     })
     observeEvent(input$`next-btn-4`, {
     
@@ -104,31 +104,34 @@ shinyServer(function(input, output, session) {
       removeClass("option-b-box", "option-b-selected")
       
       runjs("var is_a = $('#option-a-box').hasClass('option-a-selected'); 
-             if (is_a) Shiny.onInputChange('selected_option', 'A')
-             else Shiny.onInputChange('selected_option', null);")
+             if (is_a) Shiny.onInputChange('tab2_answer', 'A')
+             else Shiny.onInputChange('tab2_answer', null);")
     })
     
     onevent("click", "option-b-box", {
       toggleClass("option-b-box", "option-b-selected")
       removeClass("option-a-box", "option-a-selected")
       runjs("var is_b = $('#option-b-box').hasClass('option-b-selected'); 
-             if (is_b) Shiny.onInputChange('selected_option', 'B')
-             else Shiny.onInputChange('selected_option', null);")
+             if (is_b) Shiny.onInputChange('tab2_answer', 'B')
+             else Shiny.onInputChange('tab2_answer', null);")
     })
     
     
     output$`selected-option-text` <- renderUI({
-      if (!is.null(input$selected_option)) {
-        option_color <- ifelse(input$selected_option == "A", "option-a-color",  "option-b-color")
-        tagList(
-          p("🎉 Woo-hoo! You've chosen option ",
-            span(
-              class = option_color,
-              input$selected_option
-            )
-          )
+      req(input$tab2_answer)
+      option_color <- ifelse(input$tab2_answer == "A", "option-a-color",  "option-b-color")
+      
+      # Scroll to the bottom to see the text (selection)
+      runjs("setTimeout(function() {
+                    window.scrollTo(0,document.body.scrollHeight);
+                }, 200);")
+      
+      p("🎉 Woo-hoo! You've chosen option ",
+        span(
+          class = option_color,
+          input$tab2_answer
         )
-      }
+      )
     })
       
     data(diamonds)
@@ -153,7 +156,7 @@ shinyServer(function(input, output, session) {
     output$`tab3-plot` <- renderPlot({
       ggplot(diamonds, aes(x = carat, y = price, color = color)) +
         geom_point() +
-        scale_color_manual(values = as.character(ggsci:::ggsci_db[[input$`color-options`]][[1]])) +
+        scale_color_manual(values = as.character(ggsci:::ggsci_db[[input$tab3_answer]][[1]])) +
         labs(x = "Carat", y = "Price") +
         theme_minimal(base_size = 16) +
         theme(legend.position = "top")
@@ -161,21 +164,21 @@ shinyServer(function(input, output, session) {
     
     
     output$`q1-answer` <- renderText({
-      if (is.null(input$selected_option)) {
+      if (is.null(input$tab2_answer)) {
         HTML("Please go to the 'A/B Test' to select your answer")
       } else {
          HTML(sprintf(
-           "Your have selected %s", dQuote(input$selected_option)
+           "Your have selected %s", dQuote(input$tab2_answer)
          ))
       }
     })
     
     output$`q2-answer` <- renderText({
-      if (is.null(input$`color-options`)) {
+      if (is.null(input$tab3_answer)) {
         HTML("Please go back the 'A/B Test' to select your answer")
       } else {
         HTML(sprintf(
-          "Your have selected %s", dQuote(input$`color-options`)
+          "Your have selected %s", dQuote(input$tab3_answer)
         ))
       }
       

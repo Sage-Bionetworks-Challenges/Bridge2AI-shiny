@@ -104,8 +104,6 @@ $navbar-text-color: #000;
   }
 }
 
-
-
 .steps-container {
   padding: 0 50px;
   background-color: white;
@@ -318,9 +316,43 @@ $navbar-text-color: #000;
   grid-gap: 10px;
 }
 
-// .next-btn {
-//     position: absolute;
-//     bottom: 10%;
-//     left: 50%;
-//     transform: translateX(-50%);
-// }
+.next-btn {
+    position: relative;
+    min-width: 7em;
+    height: 3em;
+    white-space: nowrap;
+    border-radius: 2em;
+    outline: none !important;
+    border: 3px solid #090909 !important;
+    background: linear-gradient(145deg, #171717, #444245) !important;
+    box-shadow: inset 2px 2px 0px #7d7c7e,
+      inset -2px -2px 0 #1c1c1c;
+    color: #a6a6a6;
+    font-size: 1.2em;
+
+    &:hover, &:focus, &:active {
+      color: #fff;
+      text-shadow: 0 0 15px #008ece;
+    }
+
+    &:active {
+      box-shadow: inset -2px -2px 0 #5e5e5e, 
+        inset 2px 2px 0 #1c1c1c;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+}
+
+/* Put shiny notifications front and center */
+#shiny-notification-panel {
+  top: 0;
+  bottom: unset;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 450px;
+}
