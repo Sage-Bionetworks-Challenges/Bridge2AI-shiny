@@ -48,6 +48,9 @@ jobs:
         run: |
           zip -rm .venv.zip .venv
 
+      # Install R dependencies
+      # - uses: r-lib/actions/setup-renv@v2
+
       - name: Install R Packages Dependencies
         run: |
           R -f install-pkgs.R

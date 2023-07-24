@@ -3,7 +3,7 @@ name: ci
 on:
   pull_request:
     paths:
-      - .github/workflows/deploy.yml'
+      - '**/deploy.yml'
 
 jobs:
   pr:
