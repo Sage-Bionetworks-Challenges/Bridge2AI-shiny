@@ -7,7 +7,7 @@ jobs:
   pr:
     runs-on: ubuntu-latest
     # This image seems to be based on rocker/r-ver which in turn is based on debian
-    container: rocker/rstudio:4.1.2
+    container: rocker/rstudio:4.2.1
     env:
       # This should not be necessary for installing from public repo's however remotes::install_github() fails without it.
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -17,7 +17,8 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y pip python3.8-venv libcurl4-openssl-dev
+          sudo apt-get install -y pip python3.8-venv libcurl4-openssl-dev libpng-dev
+
       - uses: actions/checkout@v2
       - uses: r-lib/actions/setup-pandoc@v1
 
@@ -37,17 +38,13 @@ jobs:
 
       - name: Install R Packages Dependencies
         run: |
-          R -f install-pkgs.R
+          R -e "renv::restore(repos='https://packagemanager.rstudio.com/cran/__linux__/focal/latest')"
 
       - name: Create Environment Variables File
         run: |
           echo "CLIENT_ID=${{ secrets.OAUTH_CLIENT_ID }}" >> .env
           echo "CLIENT_SECRET=${{ secrets.OAUTH_CLIENT_SECRET }}" >> .env
           echo "APP_URL=https://${{secrets.RSCONNECT_USER}}.shinyapps.io/${{ env.TEST_APP_NAME }}" >> .env
-
-      #   - name: Test Running Shiny App
-      #     run: |
-      #       timeout 30 Rscript -e "shiny::runApp()"
 
       - name: Test Deployment of App
         shell: Rscript {0}
@@ -61,4 +58,4 @@ jobs:
           # Deploy the app to shinyapps.io
           rsconnect::deployApp(appName = "${{ env.TEST_APP_NAME }}")
           # Remove the app
-          rsconnect::terminateApp(appName = "${{ env.TEST_APP_NAME }}")
+          # rsconnect::terminateApp(appName = "${{ env.TEST_APP_NAME }}")
