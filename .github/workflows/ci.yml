@@ -35,9 +35,8 @@ jobs:
           source .venv/bin/activate
           pip3 install synapseclient
 
-      - name: Install R Packages Dependencies
-        run: |
-          R -f install-pkgs.R
+      # Install R dependencies
+      - uses: r-lib/actions/setup-renv@v2
 
       - name: Create Environment Variables File
         run: |
@@ -48,7 +47,6 @@ jobs:
       #   - name: Test Running Shiny App
       #     run: |
       #       timeout 30 Rscript -e "shiny::runApp()"
-
       - name: Test Deployment of App
         shell: Rscript {0}
         run: |
@@ -61,4 +59,4 @@ jobs:
           # Deploy the app to shinyapps.io
           rsconnect::deployApp(appName = "${{ env.TEST_APP_NAME }}")
           # Remove the app
-          rsconnect::terminateApp(appName = "${{ env.TEST_APP_NAME }}")
+        #   rsconnect::terminateApp(appName = "${{ env.TEST_APP_NAME }}")

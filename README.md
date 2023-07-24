@@ -1,1 +1,1 @@
-# BridgeAI-shiny
+# Bridge2AI-shiny
