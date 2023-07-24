@@ -12,7 +12,7 @@ jobs:
   shiny-deploy:
     runs-on: ubuntu-latest
     # This image seems to be based on rocker/r-ver which in turn is based on debian
-    container: rocker/rstudio:4.3.1
+    container: rocker/rstudio:4.2.1
     env:
       # This should not be necessary for installing from public repo's however remotes::install_github() fails without it.
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -52,7 +52,7 @@ jobs:
 
       - name: Install R Packages Dependencies
         run: |
-          R -e "renv::restore()"
+          R -e "renv::restore(repos='https://packagemanager.rstudio.com/cran/__linux__/focal/latest')"
 
       - name: Create Environment Variables File
         run: |

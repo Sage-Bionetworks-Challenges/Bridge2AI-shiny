@@ -58,4 +58,4 @@ jobs:
           # Deploy the app to shinyapps.io
           rsconnect::deployApp(appName = "${{ env.TEST_APP_NAME }}")
           # Remove the app
-        #   rsconnect::terminateApp(appName = "${{ env.TEST_APP_NAME }}")
+          # rsconnect::terminateApp(appName = "${{ env.TEST_APP_NAME }}")
