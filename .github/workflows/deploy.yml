@@ -16,6 +16,7 @@ jobs:
     env:
       # This should not be necessary for installing from public repo's however remotes::install_github() fails without it.
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      APP_NAME: bridgeai-challenge
 
     steps:
       - name: Install System Dependencies
@@ -54,35 +55,22 @@ jobs:
         run: |
           R -f install-pkgs.R
 
+      - name: Create Environment Variables File
+        run: |
+          echo "CLIENT_ID=${{ secrets.OAUTH_CLIENT_ID }}" >> .Renviron
+          echo "CLIENT_SECRET=${{ secrets.OAUTH_CLIENT_SECRET }}" >> .Renviron
+          echo "APP_URL=https://${{secrets.RSCONNECT_USER}}.shinyapps.io/${{ env.APP_NAME }}" >> .Renviron
+
       - name: Authorize and deploy app
         shell: Rscript {0}
         run: |
-          # retrieve rsConnect credentials from secrets
-          rsConnectUser <- "${{ secrets.RSCONNECT_USER }}"
-          rsConnectToken <- "${{ secrets.RSCONNECT_TOKEN }}"
-          rsConnectSecret <- "${{ secrets.RSCONNECT_SECRET }}"
-          rsconnect::setAccountInfo(rsConnectUser, rsConnectToken, rsConnectSecret)
-
-          # create config file for OAuth
-          appName <- "bridgeai-challenge"
-          appUrl <- sprintf("https://%s.shinyapps.io/%s", rsConnectUser, appName)
-          env_vars <- list(
-            CLIENT_ID = "${{ secrets.OAUTH_CLIENT_ID }}",
-            CLIENT_SECRET = "${{ secrets.OAUTH_CLIENT_SECRET }}",
-            APP_URL = appUrl
+          # set up rsConnect credentials from secrets
+          rsconnect::setAccountInfo(
+            "${{ secrets.RSCONNECT_USER }}", 
+            "${{ secrets.RSCONNECT_TOKEN }}",
+            "${{ secrets.RSCONNECT_SECRET }}"
           )
-          env_lines <- paste0(names(env_vars), "=", env_vars)
-
-          write(env_lines, file = ".Renviron", append = TRUE)
-
           # Deploy the app to shinyapps.io
-          apps <- rsconnect::applications()$name
-          if (appName %in% apps) {
-            rsconnect::configureApp(appName = appName, size = "xxxlarge", logLevel = "verbose")
-            rsconnect::deployApp(appName = appName)
-          } else {
-            rsconnect::deployApp(appName = appName)
-            rsconnect::configureApp(appName = appName, size = "xxxlarge", logLevel = "verbose")
-          }
+          rsconnect::deployApp(appName = "${{ env.APP_NAME }}")
 
-          message("\u2705 Deployed to ", appUrl)
+          message("\u2705 Successfully deployed ${{ env.APP_NAME }}")
