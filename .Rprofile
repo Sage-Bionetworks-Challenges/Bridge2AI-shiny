@@ -1,7 +1,7 @@
 source("renv/activate.R")
 
 options(
-  repos = c(RSPM = "https://packagemanager.posit.co/all/__linux__/jammy/latest",
+  repos = c(RSPM = "https://packagemanager.rstudio.com/cran/__linux__/focal/latest",
             CRAN = "https://cran.rstudio.com/"),
   renv.config.auto.snapshot = TRUE
 )
@@ -11,5 +11,5 @@ if (Sys.info()[["sysname"]] == "Windows") {
     CRAN = "https://cran.rstudio.com/"))
 } else if (Sys.info()[["sysname"]] == "Linux") {
   options(renv.config.repos.override = c(
-    RSPM = "https://packagemanager.posit.co/all/__linux__/jammy/latest"))
+    RSPM = "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"))
 }
