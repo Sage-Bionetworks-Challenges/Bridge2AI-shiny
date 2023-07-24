@@ -39,6 +39,7 @@ jobs:
       - name: Install R Packages Dependencies
         run: |
           R -e "renv::restore()"
+          R -e "remotes::install_version('rsconnect', '0.8.29')"
 
       - name: Create Environment Variables File
         run: |
