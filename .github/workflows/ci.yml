@@ -18,6 +18,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y pip python3.8-venv
+          ls .
           bash install-system-deps.sh
 
       - uses: actions/checkout@v2
