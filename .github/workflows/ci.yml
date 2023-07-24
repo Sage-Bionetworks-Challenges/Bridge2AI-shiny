@@ -35,17 +35,6 @@ jobs:
           source .venv/bin/activate
           pip3 install synapseclient
 
-      - name: zip virtual env
-        shell: bash
-        # ShinyApps has a limit of 7000 files, far exceeded by the many Python dependencies
-        # that this app' has.  As a workaround we zip the virtual environment and later
-        # unzip it in 'global.R'
-        run: |
-          zip -rm .venv.zip .venv
-
-      # Install R dependencies
-      # - uses: r-lib/actions/setup-renv@v2
-
       - name: Install R Packages Dependencies
         run: |
           R -f install-pkgs.R
