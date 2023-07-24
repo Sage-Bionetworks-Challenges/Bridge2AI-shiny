@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - add-UI-layout
     paths-ignore:
       - '**/*.md'
       - '.gitignore'

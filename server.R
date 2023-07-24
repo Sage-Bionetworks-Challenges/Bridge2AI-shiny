@@ -5,29 +5,28 @@
 # using the session token.  https://www.synapse.org
 
 shinyServer(function(input, output, session) {
-    # params <- parseQueryString(isolate(session$clientData$url_search))
-    # if (!has_auth_code(params)) {
-    #     return()
-    # }
-    # redirect_url <- paste0(
-    #     api$access, "?", "redirect_uri=", app_url, "&grant_type=",
-    #     "authorization_code", "&code=", params$code
-    # )
-    # # get the access_token and userinfo token
-    # req <- POST(redirect_url, encode = "form", body = "", authenticate(app$key, app$secret,
-    #     type = "basic"
-    # ), config = list())
-    # # Stop the code if anything other than 2XX status code is returned
-    # stop_for_status(req, task = "get an access token")
-    # token_response <- content(req, type = NULL)
-    # access_token <- token_response$access_token
-    # 
-    # session$userData$access_token <- access_token
-    # 
-    # ######## Initiate Login Process ########
-    # # synapse cookies
-    # session$sendCustomMessage(type = "readCookie", message = list())
+    params <- parseQueryString(isolate(session$clientData$url_search))
+    if (!has_auth_code(params)) {
+        return()
+    }
+    redirect_url <- paste0(
+        api$access, "?", "redirect_uri=", app_url, "&grant_type=",
+        "authorization_code", "&code=", params$code
+    )
+    # get the access_token and userinfo token
+    req <- POST(redirect_url, encode = "form", body = "", authenticate(app$key, app$secret,
+        type = "basic"
+    ), config = list())
+    # Stop the code if anything other than 2XX status code is returned
+    stop_for_status(req, task = "get an access token")
+    token_response <- content(req, type = NULL)
+    access_token <- token_response$access_token
 
+    session$userData$access_token <- access_token
+
+    # Login to synapse
+    syn$login(authToken = access_token, rememberMe = FALSE)
+    
     output$user <- renderUser({
       dashboardUser(
         name = "Awesome user",
@@ -48,7 +47,7 @@ shinyServer(function(input, output, session) {
     
     observeEvent(input$tabs, {
       if (input$tabs != "tab1") addClass("step-1", "complete-step")
-      
+
       lapply(1:4, function(i) {
         tab_name <- paste0("tab", i)
         step_box_id <- paste0("step-", i)
@@ -80,40 +79,40 @@ shinyServer(function(input, output, session) {
     observeEvent(input$tab2_answer, ignoreNULL = FALSE, {
       if(is.null(input$tab2_answer)) removeClass("step-2", "complete-step")
     })
-      
+    
     observeEvent(input$`next-btn-3`, {
       req(input$tab3_answer)
       addClass("step-3", "complete-step")
       updateTabsetPanel(session, "tabs", selected = "tab4")
     })
     observeEvent(input$`next-btn-4`, {
-    
+      
     })
     
     ## tab2 plots effect
     onevent("hover", "option-a-box", {
       toggleClass("option-a-box", "option-a-hover")
     })
-
+    
     onevent("hover", "option-b-box", {
       toggleClass("option-b-box", "option-b-hover")
     })
-
+    
     onevent("click", "option-a-box", {
       toggleClass("option-a-box", "option-a-selected")
       removeClass("option-b-box", "option-b-selected")
       
       runjs("var is_a = $('#option-a-box').hasClass('option-a-selected'); 
-             if (is_a) Shiny.onInputChange('tab2_answer', 'A')
-             else Shiny.onInputChange('tab2_answer', null);")
+         if (is_a) Shiny.onInputChange('tab2_answer', 'A')
+         else Shiny.onInputChange('tab2_answer', null);")
     })
     
     onevent("click", "option-b-box", {
       toggleClass("option-b-box", "option-b-selected")
       removeClass("option-a-box", "option-a-selected")
       runjs("var is_b = $('#option-b-box').hasClass('option-b-selected'); 
-             if (is_b) Shiny.onInputChange('tab2_answer', 'B')
-             else Shiny.onInputChange('tab2_answer', null);")
+         if (is_b) Shiny.onInputChange('tab2_answer', 'B')
+         else Shiny.onInputChange('tab2_answer', null);")
     })
     
     
@@ -123,8 +122,8 @@ shinyServer(function(input, output, session) {
       
       # Scroll to the bottom to see the text (selection)
       runjs("setTimeout(function() {
-                    window.scrollTo(0,document.body.scrollHeight);
-                }, 200);")
+                window.scrollTo(0,document.body.scrollHeight);
+            }, 200);")
       
       p("🎉 Woo-hoo! You've chosen option ",
         span(
@@ -133,7 +132,7 @@ shinyServer(function(input, output, session) {
         )
       )
     })
-      
+    
     data(diamonds)
     output[["option-a-plot"]] <- renderPlot({
       ggplot(diamonds, aes(x = carat, y = price, color = color)) +
@@ -152,7 +151,7 @@ shinyServer(function(input, output, session) {
         theme(legend.position = "top")
     })
     
-   
+    
     output$`tab3-plot` <- renderPlot({
       ggplot(diamonds, aes(x = carat, y = price, color = color)) +
         geom_point() +
@@ -167,9 +166,9 @@ shinyServer(function(input, output, session) {
       if (is.null(input$tab2_answer)) {
         HTML("Please go to the 'A/B Test' to select your answer")
       } else {
-         HTML(sprintf(
-           "Your have selected %s", dQuote(input$tab2_answer)
-         ))
+        HTML(sprintf(
+          "Your have selected %s", dQuote(input$tab2_answer)
+        ))
       }
     })
     
@@ -183,15 +182,4 @@ shinyServer(function(input, output, session) {
       }
       
     })
-    # initial loading page
-    # observeEvent(input$cookie, {
-    # 
-    #     # login and update session
-    #     access_token <- session$userData$access_token
-    # 
-    #     syn$login(authToken = access_token, rememberMe = FALSE)
-    #     
-    #     
-    # 
-    # })
 })
