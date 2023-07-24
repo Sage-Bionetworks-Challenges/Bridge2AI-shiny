@@ -35,8 +35,6 @@ jobs:
           source .venv/bin/activate
           pip3 install synapseclient
 
-      # Install R dependencies
-      # - uses: r-lib/actions/setup-renv@v2
       - name: Install R Packages Dependencies
         run: |
           R -e "renv::restore()"
