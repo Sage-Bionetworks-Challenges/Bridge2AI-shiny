@@ -13,7 +13,9 @@ cran <- c(
     "sass",
     "ggplot2",
     "ggsci",
-    "viridis"
+    "viridis",
+    "htmlwidgets",
+    "shinyjs"
 )
 
 options(repos = c(REPO_NAME = "https://packagemanager.rstudio.com/all/__linux__/focal/latest", getOption("repos")))
