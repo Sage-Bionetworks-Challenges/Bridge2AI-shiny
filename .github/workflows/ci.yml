@@ -50,7 +50,6 @@ jobs:
       #       timeout 30 Rscript -e "shiny::runApp()"
 
       - name: Test Deployment of App
-        if: ${{ contains(github.event.pull_request.changed_files, 'deploy.yml') }}
         shell: Rscript {0}
         run: |
           # set up rsConnect credentials from secrets
