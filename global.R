@@ -3,6 +3,7 @@ suppressPackageStartupMessages({
     library(httr)
     library(shiny)
     library(jsonlite)
+    library(rsconnect)
 })
 
 ## Set Up OAuth

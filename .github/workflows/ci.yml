@@ -38,8 +38,7 @@ jobs:
 
       - name: Install R Packages Dependencies
         run: |
-          R -e "renv::restore()"
-          R -e "remotes::install_version('rsconnect', '0.8.29')"
+          R -e "renv::restore(repos='https://packagemanager.rstudio.com/cran/__linux__/focal/latest')"
 
       - name: Create Environment Variables File
         run: |
