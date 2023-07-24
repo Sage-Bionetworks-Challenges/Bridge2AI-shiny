@@ -3,6 +3,10 @@
     "Version": "4.3.1",
     "Repositories": [
       {
+        "Name": "RSPM",
+        "URL": "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest"
+      },
+      {
         "Name": "CRAN",
         "URL": "https://cran.rstudio.com"
       }

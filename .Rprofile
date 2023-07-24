@@ -1,6 +1,5 @@
 source("renv/activate.R")
 
-
 options(
   repos = c(RSPM = "https://packagemanager.rstudio.com/cran/__linux__/bionic/latest",
             CRAN = "https://cran.rstudio.com/"),
