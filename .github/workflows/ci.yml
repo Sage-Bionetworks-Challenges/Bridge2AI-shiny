@@ -1,0 +1,78 @@
+name: ci
+
+on:
+  pull_request:
+
+jobs:
+  shiny-deploy:
+    runs-on: ubuntu-latest
+    # This image seems to be based on rocker/r-ver which in turn is based on debian
+    container: rocker/rstudio:4.1.2
+    env:
+      # This should not be necessary for installing from public repo's however remotes::install_github() fails without it.
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pip python3.8-venv libcurl4-openssl-dev
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-pandoc@v1
+
+      - name: Create and Activate Python Virtual Environment
+        shell: bash
+        run: |
+          python3 -m venv .venv
+          chmod 755 .venv/bin/activate
+          source .venv/bin/activate
+
+      - name: Install SynapseClient
+        shell: bash
+        run: |
+          # has to activate each bash step
+          source .venv/bin/activate
+          pip3 install synapseclient
+
+      - name: zip virtual env
+        shell: bash
+        # ShinyApps has a limit of 7000 files, far exceeded by the many Python dependencies
+        # that this app' has.  As a workaround we zip the virtual environment and later
+        # unzip it in 'global.R'
+        run: |
+          zip -rm .venv.zip .venv
+
+      # Install R dependencies
+      # - uses: r-lib/actions/setup-renv@v2
+
+      - name: Install R Packages Dependencies
+        run: |
+          R -f install-pkgs.R
+
+      - name: Create Environment Variables File
+        run: |
+          echo "CLIENT_ID=${{ secrets.OAUTH_CLIENT_ID }}" >> .Renviron
+          echo "CLIENT_SECRET=${{ secrets.OAUTH_CLIENT_SECRET }}" >> .Renviron
+
+      - name: Test Running Shiny App
+        run: |
+          Rscript -e "shiny::runApp()"
+
+      - name: Test Deployment of App
+        if: ${{ contains(github.event.pull_request.changed_files, 'deploy.yml') }}
+        shell: Rscript {0}
+        run: |
+          # retrieve rsConnect credentials from secrets
+          rsConnectUser <- "${{ secrets.RSCONNECT_USER }}"
+          rsConnectToken <- "${{ secrets.RSCONNECT_TOKEN }}"
+          rsConnectSecret <- "${{ secrets.RSCONNECT_SECRET }}"
+          rsconnect::setAccountInfo(rsConnectUser, rsConnectToken, rsConnectSecret)
+
+          # create config file for OAuth
+          appName <- "bridgeai-challenge-test"
+          appUrl <- sprintf("https://%s.shinyapps.io/%s", rsConnectUser, appName)
+
+          # Deploy the app to shinyapps.io
+          rsconnect::deployApp(appName = appName)
+          # Remove the app
+          rsconnect::terminateApp(appName = appName)
