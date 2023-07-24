@@ -17,6 +17,7 @@ suppressPackageStartupMessages({
 })
 
 ## Set Up OAuth
+readRenviron(".env")
 stopifnot(
   !is.null(client_id <- Sys.getenv("CLIENT_ID")) && nchar(client_id) > 0,
   !is.null(client_secret <- Sys.getenv("CLIENT_SECRET")) && nchar(client_secret) > 0,
