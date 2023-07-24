@@ -14,52 +14,55 @@ jobs:
       TEST_APP_NAME: bridgeai-challenge-test
 
     steps:
-      - name: Install System Dependencies
+      - name: test
         run: |
-          sudo apt-get update
-          sudo apt-get install -y pip python3.8-venv libcurl4-openssl-dev
-      - uses: actions/checkout@v2
-      - uses: r-lib/actions/setup-pandoc@v1
+          echo ${{ github.event.pull_request.changed_files }}
+    #   - name: Install System Dependencies
+    #     run: |
+    #       sudo apt-get update
+    #       sudo apt-get install -y pip python3.8-venv libcurl4-openssl-dev
+    #   - uses: actions/checkout@v2
+    #   - uses: r-lib/actions/setup-pandoc@v1
 
-      - name: Create and Activate Python Virtual Environment
-        shell: bash
-        run: |
-          python3 -m venv .venv
-          chmod 755 .venv/bin/activate
-          source .venv/bin/activate
+    #   - name: Create and Activate Python Virtual Environment
+    #     shell: bash
+    #     run: |
+    #       python3 -m venv .venv
+    #       chmod 755 .venv/bin/activate
+    #       source .venv/bin/activate
 
-      - name: Install SynapseClient
-        shell: bash
-        run: |
-          # has to activate each bash step
-          source .venv/bin/activate
-          pip3 install synapseclient
+    #   - name: Install SynapseClient
+    #     shell: bash
+    #     run: |
+    #       # has to activate each bash step
+    #       source .venv/bin/activate
+    #       pip3 install synapseclient
 
-      - name: Install R Packages Dependencies
-        run: |
-          R -f install-pkgs.R
+    #   - name: Install R Packages Dependencies
+    #     run: |
+    #       R -f install-pkgs.R
 
-      - name: Create Environment Variables File
-        run: |
-          echo "CLIENT_ID=${{ secrets.OAUTH_CLIENT_ID }}" >> .env
-          echo "CLIENT_SECRET=${{ secrets.OAUTH_CLIENT_SECRET }}" >> .env
-          echo "APP_URL=https://${{secrets.RSCONNECT_USER}}.shinyapps.io/${{ env.TEST_APP_NAME }}" >> .env
+    #   - name: Create Environment Variables File
+    #     run: |
+    #       echo "CLIENT_ID=${{ secrets.OAUTH_CLIENT_ID }}" >> .env
+    #       echo "CLIENT_SECRET=${{ secrets.OAUTH_CLIENT_SECRET }}" >> .env
+    #       echo "APP_URL=https://${{secrets.RSCONNECT_USER}}.shinyapps.io/${{ env.TEST_APP_NAME }}" >> .env
 
-      #   - name: Test Running Shiny App
-      #     run: |
-      #       timeout 30 Rscript -e "shiny::runApp()"
+    #   #   - name: Test Running Shiny App
+    #   #     run: |
+    #   #       timeout 30 Rscript -e "shiny::runApp()"
 
-      - name: Test Deployment of App
-        if: ${{ contains(github.event.pull_request.changed_files, 'deploy.yml') }}
-        shell: Rscript {0}
-        run: |
-          # set up rsConnect credentials from secrets
-          rsconnect::setAccountInfo(
-            "${{ secrets.RSCONNECT_USER }}", 
-            "${{ secrets.RSCONNECT_TOKEN }}",
-            "${{ secrets.RSCONNECT_SECRET }}"
-          )
-          # Deploy the app to shinyapps.io
-          rsconnect::deployApp(appName = "${{ env.TEST_APP_NAME }}")
-          # Remove the app
-          rsconnect::terminateApp(appName = "${{ env.TEST_APP_NAME }}")
+    #   - name: Test Deployment of App
+    #     if: ${{ contains(github.event.pull_request.changed_files, 'deploy.yml') }}
+    #     shell: Rscript {0}
+    #     run: |
+    #       # set up rsConnect credentials from secrets
+    #       rsconnect::setAccountInfo(
+    #         "${{ secrets.RSCONNECT_USER }}",
+    #         "${{ secrets.RSCONNECT_TOKEN }}",
+    #         "${{ secrets.RSCONNECT_SECRET }}"
+    #       )
+    #       # Deploy the app to shinyapps.io
+    #       rsconnect::deployApp(appName = "${{ env.TEST_APP_NAME }}")
+    #       # Remove the app
+    #       rsconnect::terminateApp(appName = "${{ env.TEST_APP_NAME }}")
