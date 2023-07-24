@@ -57,9 +57,9 @@ jobs:
 
       - name: Create Environment Variables File
         run: |
-          echo "CLIENT_ID=${{ secrets.OAUTH_CLIENT_ID }}" >> .Renviron
-          echo "CLIENT_SECRET=${{ secrets.OAUTH_CLIENT_SECRET }}" >> .Renviron
-          echo "APP_URL=https://${{secrets.RSCONNECT_USER}}.shinyapps.io/${{ env.APP_NAME }}" >> .Renviron
+          echo "CLIENT_ID=${{ secrets.OAUTH_CLIENT_ID }}" >> .env
+          echo "CLIENT_SECRET=${{ secrets.OAUTH_CLIENT_SECRET }}" >> .env
+          echo "APP_URL=https://${{secrets.RSCONNECT_USER}}.shinyapps.io/${{ env.APP_NAME }}" >> .env
 
       - name: Authorize and deploy app
         shell: Rscript {0}
