@@ -23,15 +23,17 @@ shinyServer(function(input, output, session) {
     access_token <- token_response$access_token
 
     session$userData$access_token <- access_token
-
+    
     # Login to synapse
     syn$login(authToken = access_token, rememberMe = FALSE)
-
+    
+    user <- syn$getUserProfile(syn$username)
+    
     output$user <- renderUser({
       dashboardUser(
-        name = "Awesome user",
+        name = paste0(user$firstName, " ", user$lastName),
         image = "https://img.icons8.com/?size=512&id=39084&format=png",
-        subtitle = "@awesome-user",
+        subtitle = paste0("@", user$userName),
         tags$div(
           id = "team",
           class = "icon-button",
@@ -41,9 +43,57 @@ shinyServer(function(input, output, session) {
       )
     })
     
-    ## TODO: make sure the tabs cannot be clicked until the plots are generated
-    # runjs("$('.step-box').attr('style', 'pointer-events: none;');")
-    # runjs("$('.step-box').removeAttr('style');")
+    Sys.sleep(2)
+    waiter_hide()
+    
+    plot_theme <-  
+      theme_minimal(base_size = 14) +
+      theme(
+        legend.position = c(0.95, 0.4),
+        plot.background = element_rect(fill = "#f5f5f5", color = NA)
+      )
+    
+    data(diamonds)
+    diamonds <- diamonds[sample(1:nrow(diamonds), 2000),]
+    output[["option-a-plot"]] <- renderPlot({
+      ggplot(diamonds, aes(x = carat, y = price, color = color)) +
+        geom_point() +
+        scale_color_manual(values = inferno(nlevels(diamonds$color))) +
+        labs(x = "Carat", y = "Price") +
+        plot_theme
+    })
+    
+    output[["option-b-plot"]] <- renderPlot({
+      ggplot(diamonds, aes(x = carat, y = price, color = color)) +
+        geom_point() +
+        labs(x = "Carat", y = "Price") +
+        plot_theme
+    })
+    
+    
+    output$`tab3-plot` <- renderPlot({
+      ggplot(diamonds, aes(x = carat, y = price, color = color)) +
+        geom_point() +
+        scale_color_manual(values = as.character(ggsci:::ggsci_db[[input$tab3_answer]][[1]])) +
+        labs(x = "Carat", y = "Price") +
+        plot_theme
+    })
+    
+    output$`q1-answer` <- renderUI({
+      if (is.null(input$tab2_answer)) {
+        h4("🚫 Please choose your preferred option in the 'A/B Test'", class = "error")
+      } else {
+        strong(h4(sprintf(
+          "🎉  Woo-hoo! You've chosen option %s", dQuote(input$tab2_answer)
+        )))
+      }
+    })
+    
+    output$`q2-answer` <- renderUI({
+      strong(h4(sprintf(
+        "🎉  Woo-hoo! You've chosen option %s", dQuote(input$tab3_answer)
+      )))
+    })
     
     observeEvent(input$tabs, {
       if (input$tabs != "tab1") addClass("step-1", "complete-step")
@@ -115,70 +165,5 @@ shinyServer(function(input, output, session) {
          if (is_b) Shiny.onInputChange('tab2_answer', 'B')
          else Shiny.onInputChange('tab2_answer', null);")
     })
-    
-    # output$`selected-option-text` <- renderUI({
-    #   req(input$tab2_answer)
-    #   option_color <- ifelse(input$tab2_answer == "A", "option-a-color",  "option-b-color")
-    #   
-    #   # Scroll to the bottom to see the text (selection)
-    #   runjs("setTimeout(function() {
-    #             window.scrollTo(0,document.body.scrollHeight);
-    #         }, 200);")
-    #   
-    #   p("🎉 Woo-hoo! You've chosen option ",
-    #     span(
-    #       class = option_color,
-    #       input$tab2_answer
-    #     )
-    #   )
-    # })
-    
-    plot_theme <-  
-      theme_minimal(base_size = 14) +
-      theme(
-        legend.position = c(0.95, 0.4),
-        plot.background = element_rect(fill = "#f5f5f5", color = NA)
-    )
 
-    data(diamonds)
-    output[["option-a-plot"]] <- renderPlot({
-      ggplot(diamonds, aes(x = carat, y = price, color = color)) +
-        geom_point() +
-        scale_color_manual(values = inferno(nlevels(diamonds$color))) +
-        labs(x = "Carat", y = "Price") +
-        plot_theme
-    })
-    
-    output[["option-b-plot"]] <- renderPlot({
-      ggplot(diamonds, aes(x = carat, y = price, color = color)) +
-        geom_point() +
-        labs(x = "Carat", y = "Price") +
-        plot_theme
-    })
-    
-    
-    output$`tab3-plot` <- renderPlot({
-      ggplot(diamonds, aes(x = carat, y = price, color = color)) +
-        geom_point() +
-        scale_color_manual(values = as.character(ggsci:::ggsci_db[[input$tab3_answer]][[1]])) +
-        labs(x = "Carat", y = "Price") +
-        plot_theme
-    })
-    
-    
-    output$`q1-answer` <- renderUI({
-      if (is.null(input$tab2_answer)) {
-        h4("🚫 Please choose your preferred option in the 'A/B Test'", class = "error")
-      } else {
-        strong(h4(sprintf(
-          "🎉  Woo-hoo! You've chosen option %s", dQuote(input$tab2_answer)
-        )))
-      }
-    })
-    
-    output$`q2-answer` <- renderUI({
-      strong(h4(sprintf(
-        "🎉  Woo-hoo! You've chosen option %s", dQuote(input$tab3_answer)
-      )))
-    })
 })

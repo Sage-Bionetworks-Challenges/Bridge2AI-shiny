@@ -45,15 +45,19 @@ $user-btn-text-color: rgba($black, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: $navbar-text-color;
-    background-color: $navbar-bg-color !important;
-    font-weight: 400;
     height: $navbar-height;
-    transition: all 200ms ease;
-    cursor: pointer;
+    background-color: $navbar-bg-color !important;
 
-    &:hover {
-      color: $black;
+    .logo-title {
+      height: $navbar-height;
+      color: $navbar-text-color;
+      background-color: $navbar-bg-color !important;
+      font-weight: 400;
+      transition: all 200ms ease;
+  
+      &:hover {
+        color: $black;
+      }
     }
   }
 

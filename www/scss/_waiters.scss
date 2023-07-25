@@ -1,0 +1,31 @@
+.waiter-overlay.waiter-fullscreen  {
+    height: 100% !important;
+}
+
+.landing-waiter {
+    width: 300px;
+
+    .text1 {
+        text-align: left
+    }
+    
+    .text2 {
+        text-align: right
+    }
+}
+
+.plot-waiter {
+    @extend .flex-center;
+    gap: 4px;
+    margin: 8px;
+
+    h3 {
+        color: $dark-grey;
+        margin: 0;
+    }
+
+    .waver > div {
+        background-color: $dark-grey;
+        width: 3px;
+    }
+}
