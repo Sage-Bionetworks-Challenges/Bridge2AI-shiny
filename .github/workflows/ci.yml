@@ -11,7 +11,7 @@ jobs:
     env:
       # This should not be necessary for installing from public repo's however remotes::install_github() fails without it.
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      TEST_APP_NAME: bridgeai-challenge-test
+      TEST_APP_NAME: bridge2ai-challenge-staging
 
     steps:
       - name: Install System Dependencies
@@ -46,7 +46,7 @@ jobs:
           echo "CLIENT_SECRET=${{ secrets.OAUTH_CLIENT_SECRET }}" >> .env
           echo "APP_URL=https://${{secrets.RSCONNECT_USER}}.shinyapps.io/${{ env.TEST_APP_NAME }}" >> .env
 
-      - name: Test Deployment of App
+      - name: Deployment App to Staging
         shell: Rscript {0}
         run: |
           # set up rsConnect credentials from secrets
@@ -57,5 +57,3 @@ jobs:
           )
           # Deploy the app to shinyapps.io
           rsconnect::deployApp(appName = "${{ env.TEST_APP_NAME }}")
-          # Remove the app
-          # rsconnect::terminateApp(appName = "${{ env.TEST_APP_NAME }}")
