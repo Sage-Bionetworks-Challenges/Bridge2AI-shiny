@@ -20,6 +20,17 @@ ui <- dashboardPage(
       tags$script(htmlwidgets::JS("setTimeout(function(){history.pushState({}, 'Bridge2AI', window.location.pathname);},2000);"))
     ),
     useShinyjs(),
+    autoWaiter(
+      color = transparent(0),
+      html = div(
+        class = "plot-waiter",
+        tagList(
+          h3("Loading"),
+          spin_wave()
+        )
+      ),
+      fadeout = 500
+    ),
     fluidRow(
       class = "steps-container",
       div(

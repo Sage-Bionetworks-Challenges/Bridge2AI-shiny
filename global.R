@@ -8,6 +8,7 @@ suppressPackageStartupMessages({
   library(sass)
   library(shinydashboard)
   library(shinydashboardPlus)
+  library(waiter)
   library(ggplot2)
   library(viridis)
   library(ggsci)

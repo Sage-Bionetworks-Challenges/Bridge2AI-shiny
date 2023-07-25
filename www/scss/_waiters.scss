@@ -1,0 +1,15 @@
+.plot-waiter {
+    @extend .flex-center;
+    gap: 4px;
+    margin: 8px;
+
+    h3 {
+        color: $dark-grey;
+        margin: 0;
+    }
+
+    .waver > div {
+        background-color: $dark-grey;
+        width: 3px;
+    }
+}

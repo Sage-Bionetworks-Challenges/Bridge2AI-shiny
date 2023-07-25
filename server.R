@@ -44,7 +44,6 @@ shinyServer(function(input, output, session) {
     ## TODO: make sure the tabs cannot be clicked until the plots are generated
     # runjs("$('.step-box').attr('style', 'pointer-events: none;');")
     # runjs("$('.step-box').removeAttr('style');")
-    
     observeEvent(input$tabs, {
       if (input$tabs != "tab1") addClass("step-1", "complete-step")
 
