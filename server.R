@@ -24,16 +24,161 @@ shinyServer(function(input, output, session) {
 
     session$userData$access_token <- access_token
 
-    ######## Initiate Login Process ########
-    # synapse cookies
-    session$sendCustomMessage(type = "readCookie", message = list())
+    # Login to synapse
+    syn$login(authToken = access_token, rememberMe = FALSE)
 
-    # initial loading page
-    observeEvent(input$cookie, {
+    output$user <- renderUser({
+      dashboardUser(
+        name = "Awesome user",
+        image = "https://img.icons8.com/?size=512&id=39084&format=png",
+        subtitle = "@awesome-user",
+        tags$div(
+          id = "team",
+          class = "icon-button",
+          tags$img(src = "https://img.icons8.com/?size=512&id=11901&format=png", height = "32px", width = "32px"),
+          if(TRUE) tags$a("Awesome team", href = "https://www.google.com", target = "_blank")
+        )
+      )
+    })
+    
+    ## TODO: make sure the tabs cannot be clicked until the plots are generated
+    # runjs("$('.step-box').attr('style', 'pointer-events: none;');")
+    # runjs("$('.step-box').removeAttr('style');")
+    
+    observeEvent(input$tabs, {
+      if (input$tabs != "tab1") addClass("step-1", "complete-step")
 
-        # login and update session
-        access_token <- session$userData$access_token
+      lapply(1:4, function(i) {
+        tab_name <- paste0("tab", i)
+        step_box_id <- paste0("step-", i)
+        if (input$tabs == tab_name) {
+          addClass(step_box_id, "pop-step")
+        } else {
+          removeClass(step_box_id, "pop-step")
+        }
+      })
+      updateTabsetPanel(session, "tabs", selected = input$tabs)
+    })
+    
+    observeEvent(input$`next-btn-1`, {
+      addClass("step-1", "complete-step")
+      updateTabsetPanel(session, "tabs", selected = "tab2")
+    })
+    observeEvent(input$`next-btn-2`, {
+      if (!is.null(input$tab2_answer)) {
+        addClass("step-2", "complete-step")
+        updateTabsetPanel(session, "tabs", selected = "tab3")
+      } else {
+        shiny::showNotification(
+          "Please select an answer!",
+          type = "error",
+          duration = 5
+        )
+      }
+    })
+    observeEvent(input$tab2_answer, ignoreNULL = FALSE, {
+      if(is.null(input$tab2_answer)) removeClass("step-2", "complete-step")
+    })
+    
+    observeEvent(input$`next-btn-3`, {
+      req(input$tab3_answer)
+      addClass("step-3", "complete-step")
+      updateTabsetPanel(session, "tabs", selected = "tab4")
+    })
+    observeEvent(input$`submit-btn`, {
+      shiny::showNotification(
+        "Submission is not supported yet ~",
+        type = "message",
+        duration = 5
+      )
+    })
+    
+    
+    onevent("click", "option-a-box", {
+      toggleClass("option-a-box", "selected")
+      removeClass("option-b-box", "selected")
+      runjs("setTimeout(function() {
+                window.scrollTo(0,document.body.scrollHeight);
+            }, 200);")
+      runjs("var is_a = $('#option-a-box').hasClass('selected'); 
+         if (is_a) Shiny.onInputChange('tab2_answer', 'A')
+         else Shiny.onInputChange('tab2_answer', null);")
+    })
+    
+    onevent("click", "option-b-box", {
+      toggleClass("option-b-box", "selected")
+      removeClass("option-a-box", "selected")
+      runjs("setTimeout(function() {
+                window.scrollTo(0,document.body.scrollHeight);
+            }, 200);")
+      runjs("var is_b = $('#option-b-box').hasClass('selected'); 
+         if (is_b) Shiny.onInputChange('tab2_answer', 'B')
+         else Shiny.onInputChange('tab2_answer', null);")
+    })
+    
+    # output$`selected-option-text` <- renderUI({
+    #   req(input$tab2_answer)
+    #   option_color <- ifelse(input$tab2_answer == "A", "option-a-color",  "option-b-color")
+    #   
+    #   # Scroll to the bottom to see the text (selection)
+    #   runjs("setTimeout(function() {
+    #             window.scrollTo(0,document.body.scrollHeight);
+    #         }, 200);")
+    #   
+    #   p("🎉 Woo-hoo! You've chosen option ",
+    #     span(
+    #       class = option_color,
+    #       input$tab2_answer
+    #     )
+    #   )
+    # })
+    
+    plot_theme <-  
+      theme_minimal(base_size = 14) +
+      theme(
+        legend.position = c(0.95, 0.4),
+        plot.background = element_rect(fill = "#f5f5f5", color = NA)
+    )
 
-        syn$login(authToken = access_token, rememberMe = FALSE)
+    data(diamonds)
+    output[["option-a-plot"]] <- renderPlot({
+      ggplot(diamonds, aes(x = carat, y = price, color = color)) +
+        geom_point() +
+        scale_color_manual(values = inferno(nlevels(diamonds$color))) +
+        labs(x = "Carat", y = "Price") +
+        plot_theme
+    })
+    
+    output[["option-b-plot"]] <- renderPlot({
+      ggplot(diamonds, aes(x = carat, y = price, color = color)) +
+        geom_point() +
+        labs(x = "Carat", y = "Price") +
+        plot_theme
+    })
+    
+    
+    output$`tab3-plot` <- renderPlot({
+      ggplot(diamonds, aes(x = carat, y = price, color = color)) +
+        geom_point() +
+        scale_color_manual(values = as.character(ggsci:::ggsci_db[[input$tab3_answer]][[1]])) +
+        labs(x = "Carat", y = "Price") +
+        plot_theme
+    })
+    
+    
+    output$`q1-answer` <- renderUI({
+      if (is.null(input$tab2_answer)) {
+        h4("🚫 Please choose your preferred option in the 'A/B Test'", class = "error")
+      } else {
+        strong(h4(sprintf(
+          "🎉  Woo-hoo! You've chosen option %s", dQuote(input$tab2_answer)
+        )))
+      }
+    })
+    
+    output$`q2-answer` <- renderUI({
+      strong(h4(sprintf(
+        "🎉  Woo-hoo! You've chosen option %s", dQuote(input$tab3_answer)
+      )))
     })
 })

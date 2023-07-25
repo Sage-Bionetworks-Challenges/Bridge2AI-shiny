@@ -1,0 +1,94 @@
+$navbar-bg-color: $white;
+$navbar-text-color: $dark-grey;
+$navbar-height: 64px;
+$user-btn-text-color: rgba($black, 0.7);
+
+.skin-blue .main-header {
+  top: 15px;
+  height: $navbar-height;
+  background-color: $navbar-bg-color;
+  z-index: 10;
+
+  .navbar {
+    color: $navbar-text-color;
+    background-color: $navbar-bg-color;
+    height: $navbar-height;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 16px;
+    
+    .nav>li>a, .nav .open>a {
+      color: $user-btn-text-color;
+      background-color: $navbar-bg-color !important;
+      border-radius: 2em !important;
+      border: none !important;
+      transition: all 200ms ease;
+
+      &:hover, &:active, &:focus {
+        color: $black;
+      }
+    }
+
+    .nav>li>a {
+      box-shadow: 6px 6px 12px #c5c5c5,
+      -6px -6px 12px #fff;
+    }
+
+    .nav .open>a {
+      box-shadow: inset 4px 4px 12px #c5c5c5,
+        inset -4px -4px 12px #fff !important;
+    }
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $navbar-text-color;
+    background-color: $navbar-bg-color !important;
+    font-weight: 400;
+    height: $navbar-height;
+    transition: all 200ms ease;
+    cursor: pointer;
+
+    &:hover {
+      color: $black;
+    }
+  }
+
+  .dashboard-user {
+    top: calc(50px + ($navbar-height - 50px) / 2);
+    box-shadow: 0 10px 10px rgba($navbar-text-color, 0.1);
+    
+    .user-header {
+      background-color: $navbar-bg-color;
+
+      img {
+        border: 4px solid white !important;
+      }
+      
+      p {
+        color: $user-btn-text-color !important;
+      }
+    }
+  
+    small {
+      font-style: italic;
+      color: $navbar-text-color;
+    }
+    
+    .user-body {
+      @extend .flex-center;
+
+      .icon-button {
+        text-decoration: underline;
+      }
+
+      a {
+        color: $user-btn-text-color !important;
+      }
+    }
+  
+  }
+}
