@@ -31,6 +31,17 @@ ui <- dashboardPage(
       ),
       fadeout = 500
     ),
+    waiterShowOnLoad(
+      color = "black", 
+      html = div(
+        class = "landing-waiter",
+        tagList(
+          h3("Brigde2AI", class = "text1"),
+          spin_ellipsis(),
+          h3("DREAM", class = "text2")
+        )
+      )
+    ),
     fluidRow(
       class = "steps-container",
       div(

@@ -41,6 +41,9 @@ shinyServer(function(input, output, session) {
       )
     })
     
+    Sys.sleep(2)
+    waiter_hide()
+    
     ## TODO: make sure the tabs cannot be clicked until the plots are generated
     # runjs("$('.step-box').attr('style', 'pointer-events: none;');")
     # runjs("$('.step-box').removeAttr('style');")
