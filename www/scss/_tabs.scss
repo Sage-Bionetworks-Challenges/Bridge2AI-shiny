@@ -1,0 +1,137 @@
+.tab-content {
+    padding: 16px 48px;
+}
+
+// tab2 
+.ab-test-title {
+    font-size: 3em;  
+    font-weight: bold;
+    font-family: 'georgia';
+}
+
+.ab-test-container {
+  @extend .flex-center;
+  gap: 48px;
+  position: relative;
+  min-height: 400px;
+}
+
+// .vs-cycle {
+//   position: absolute;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+//   width: 3em;
+//   height: 3em;
+//   background-color: #504099;
+//   border-radius: 50%;
+//   z-index: 10;
+//   border: 3px solid $black;
+//   @extend .flex-center;
+//   font-size: 1.5em;
+//   color: white;
+// }
+
+#option-a-box, #option-b-box {
+  @extend .flex-center;
+  @extend .flex-col;
+  flex: 40%;
+  min-width: 320px;
+  padding: 2.5em;
+  gap: 16px;
+  transition: box-shadow 400ms ease;
+  border: 3px solid $light-grey;
+  border-radius: 2em;
+  cursor: pointer;
+
+  &:hover {
+    @extend .float;
+  }
+
+  &.selected {
+    @extend .float;
+  }
+}
+
+.option-text {
+  font-weight: 400;
+  font-size: 2em;
+  color: $grey;
+}
+
+// #option-a-box {
+//   // height: 450px;
+//   @extend .flex-center;
+//   @extend .flex-col;
+//   gap: 16px;
+//   padding: 12px 64px;
+//   border: 3px solid $black;
+//   border-right: none;
+//   cursor: pointer;
+//   transition: box-shadow 100ms ease;
+// }
+
+// #option-b-box {
+//   // height: 450px;
+//   @extend .flex-center;
+//   @extend .flex-col;
+//   gap: 16px;
+//   padding: 12px 64px;
+//   border: 3px solid $black;
+//   cursor: pointer;
+//   transition: box-shadow 100ms ease;
+// }
+
+// #option-a-text {
+//     font-weight: bold;
+//     font-size: 2em;
+//     color: #f962a7;
+// }
+
+// #option-b-text {
+//     font-weight: bold;
+//     font-size: 2em;
+//     color: #0aaf88;
+// }
+
+// .option-a-hover {
+//     box-shadow: inset 0 0 10px 5px #f962a7;
+// }
+
+// .option-b-hover {
+//     box-shadow: inset 0 0 10px 5px #0aaf88;
+// }
+
+// .option-a-selected {
+//     box-shadow: inset 0 0 10px 5px #f962a7;
+// }
+
+// .option-b-selected {
+//     box-shadow: inset 0 0 10px 5px #0aaf88;
+// }
+
+#selected-option-text {
+  p {
+    font-size: 2em;
+    font-weight: 400;
+  }
+  
+  span {
+    font-size: 2.25em;
+    font-weight: 600;
+  }
+}
+// .option-a-color {
+//   color: #f962a7
+// }
+// .option-b-color {
+//   color: #0aaf88
+// } 
+
+.shiny-options-group {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  grid-gap: 10px;
+}

@@ -1,0 +1,27 @@
+
+.next-btn {
+    position: relative;
+    min-width: 7em;
+    height: 3em;
+    white-space: nowrap;
+    border-radius: 2em;
+    outline: none !important;
+    border: 2px solid rgba($black, 0.8) !important;
+    background: rgba($black, 0.9) !important;
+    box-shadow: inset 2px 2px 0px $grey,
+      inset -2px -2px 0 rgba($black, 0.6);
+    color: $white;
+
+    &:hover, &:focus, &:active {
+      color: #fff;
+    }
+
+    &:active {
+      box-shadow: inset -2px -2px 0 $grey, 
+        inset 2px 2px 0 rgba($black, 0.6);
+
+      &:hover {
+        color: #fff;
+      }
+    }
+}
