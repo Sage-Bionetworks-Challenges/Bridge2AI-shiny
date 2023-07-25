@@ -1,7 +1,12 @@
 ui <- dashboardPage(
   title = "Bridge2AI",
   header = dashboardHeader(
-    title = "Bridge2AI",
+    title = a(
+      "Bridge2AI", 
+      class = "logo-title",
+      href="https://www.synapse.org/#!Synapse:syn52148683", 
+      target = "_blank"
+    ),
     userOutput("user")
   ),
   sidebar = dashboardSidebar(
