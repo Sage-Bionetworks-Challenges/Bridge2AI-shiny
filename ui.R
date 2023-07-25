@@ -17,7 +17,8 @@ ui <- dashboardPage(
   body = dashboardBody(
     tags$head(
       tags$style(sass(sass_file("www/scss/main.scss"))),
-      tags$script(htmlwidgets::JS("setTimeout(function(){history.pushState({}, 'Bridge2AI', window.location.pathname);},2000);"))
+      tags$script(htmlwidgets::JS("setTimeout(function(){history.pushState({}, 'Bridge2AI', window.location.pathname);},2000);")),
+      tags$script(htmlwidgets::JS("var step_1_value = 0; var step_2_value = 0; var step_3_value = 0; var step_4_value = 0;"))
     ),
     useShinyjs(),
     autoWaiter(
@@ -45,11 +46,12 @@ ui <- dashboardPage(
     fluidRow(
       class = "steps-container",
       div(
-        class = "steps",
+        id = "steps",
         tags$section(
           id = "step-1",
           class = "step-box",
-          onclick = "Shiny.onInputChange('tabs', 'tab1');",
+          onclick = "Shiny.onInputChange('tabs', 'tab1');
+                     Shiny.setInputValue('step-1', step_1_value++);",
           tagList(
             icon("book-open-reader"),
             span(class = "step-text", "Challenge")
@@ -58,7 +60,8 @@ ui <- dashboardPage(
         tags$section(
           id = "step-2",
           class = "step-box",
-          onclick = "Shiny.onInputChange('tabs', 'tab2');",
+          onclick = "Shiny.onInputChange('tabs', 'tab2');
+                     Shiny.setInputValue('step-2', step_2_value++);",
           tagList(
             icon("flask"),
             span(class = "step-text", "A/B Test")
@@ -67,7 +70,8 @@ ui <- dashboardPage(
         tags$section(
           id = "step-3",
           class = "step-box",
-          onclick = "Shiny.onInputChange('tabs', 'tab3');",
+          onclick = "Shiny.onInputChange('tabs', 'tab3');
+                     Shiny.setInputValue('step-3', step_3_value++);",
           tagList(
             icon("list"),
             span(class = "step-text", "Q & A")
@@ -76,7 +80,8 @@ ui <- dashboardPage(
         tags$section(
           id = "step-4",
           class = "step-box",
-          onclick = "Shiny.onInputChange('tabs', 'tab4');",
+          onclick = "Shiny.onInputChange('tabs', 'tab4');
+                     Shiny.setInputValue('step-4', step_4_value++);",
           tagList(
             icon("boxes-packing"),
             span(class = "step-text", "Review & Submit")
@@ -119,7 +124,6 @@ ui <- dashboardPage(
                   span("A", class = "option-text")
                 )
               ),
-              # div(class = "vs-cycle", "VS"),
               div(
                 id = "option-b-box",
                 width = 6,
@@ -130,14 +134,6 @@ ui <- dashboardPage(
               )
             )
           ),
-          # br(),
-          # fluidRow(
-          #   column(
-          #     align = "center",
-          #     width = 12,
-          #     uiOutput("selected-option-text")
-          #   )
-          # ),
           br(), br(),
           fluidRow(
             column(
