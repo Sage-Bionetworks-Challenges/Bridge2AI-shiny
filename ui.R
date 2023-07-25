@@ -74,15 +74,17 @@ ui <- dashboardPage(
            Maecenas luctus neque id nulla blandit blandit. Cras consequat condimentum dictum. Aenean eu mattis justo. Proin gravida urna vel maximus aliquet. Suspendisse tincidunt dictum velit at pulvinar. Ut tincidunt massa tortor, vitae viverra ipsum pellentesque ac. Aenean laoreet varius turpis, eget consectetur elit rhoncus eu. Sed blandit volutpat ipsum, et congue mauris luctus accumsan. Ut ultricies velit vel pretium scelerisque. Praesent placerat orci in justo suscipit varius. Nulla facilisi. Praesent et arcu ut dui cursus rutrum."
           ),
           br(), br(), br(),
-          column(
-            width = 12,
-            align = "center",
-            actionButton("next-btn-1", "Next", class = "next-btn")
+          fluidRow(
+            column(
+              width = 12,
+              align = "center",
+              actionButton("next-btn-1", "Next", class = "next-btn")
+            )
           )
         ),
         tabItem(
           tabName = "tab2",
-          h2("Which plot is better?", align = "center"),
+          h2("🎆 Which plot POPS the most? A or B?", align = "center"),
           br(),
           fluidRow(
             column(width = 1),
@@ -121,10 +123,13 @@ ui <- dashboardPage(
               uiOutput("selected-option-text")
             )
           ),
-          column(
-            width = 12,
-            align = "center",
-            actionButton("next-btn-2", "Save & Next", class = "next-btn")
+          br(), br(), br(),
+          fluidRow(
+            column(
+              width = 12,
+              align = "center",
+              actionButton("next-btn-2", "Save & Next", class = "next-btn")
+            )
           )
         ),
         tabItem(
@@ -139,7 +144,7 @@ ui <- dashboardPage(
             column(width = 1)
           ),
           br(),
-          h2("Choose the best color: ", align = "center"),
+          h2("Color me creative! 🎨 Pick your perfect scatter plot palettes", align = "center"),
           br(),
           fluidRow(
             column(width = 1),
@@ -155,45 +160,45 @@ ui <- dashboardPage(
             column(width = 1)
           ),
           br(), br(), br(),
-          column(
-            width = 12,
-            align = "center",
-            actionButton("next-btn-3", "Save & Next", class = "next-btn")
+          fluidRow(
+            column(
+              width = 12,
+              align = "center",
+              actionButton("next-btn-3", "Save & Next", class = "next-btn")
+            )
           )
         ),
         tabItem(
           tabName = "tab4",
-          h2("Review and submit your answers", align = "center"),
+          # h2("Review and submit your answers", align = "center"),
           fluidRow(
-            column(width = 2),
+            column(width = 1),
             column(
-              width = 8,
-              align = "center",
+              width = 10,
               tagList(
-                h3("Which plot is better:"),
-                htmlOutput("q1-answer")
+                h3("Which plot POPS the most? A or B?"),
+                br(),
+                uiOutput("q1-answer", class = "answer-text"),
               )
-            ),
-            column(width = 2)
+            )
           ),
-          br(),
           fluidRow(
-            column(width = 2),
+            column(width = 1),
             column(
-              width = 8,
-              align = "center",
-              tagList(
-                h3("Choose the best color:"),
-                htmlOutput("q2-answer")
-              )
-            ),
-            column(width = 2)
+              width = 10,
+              br(), br(),
+              h3("Pick your perfect scatter plot palettes:"),
+              br(),
+              uiOutput("q2-answer", class = "answer-text")
+            )
           ),
           br(), br(), br(),
-          column(
-            width = 12,
-            align = "center",
-            actionButton("next-btn-4", "Submit", class = "next-btn")
+          fluidRow(
+            column(
+              width = 12,
+              align = "center",
+              actionButton("next-btn-4", "Submit", class = "next-btn")
+            )
           )
         )
       )

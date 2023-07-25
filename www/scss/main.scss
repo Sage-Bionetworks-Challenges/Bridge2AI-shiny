@@ -44,10 +44,8 @@ $navbar-text-color: #000;
     }
 
     .nav>li>a {
-      &:hover {
-        box-shadow: 6px 6px 12px #c5c5c5,
-        -6px -6px 12px #fff;
-      }
+      box-shadow: 6px 6px 12px #c5c5c5,
+      -6px -6px 12px #fff;
     }
 
     .nav .open>a {

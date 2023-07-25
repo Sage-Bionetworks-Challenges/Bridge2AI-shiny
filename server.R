@@ -162,24 +162,19 @@ shinyServer(function(input, output, session) {
     })
     
     
-    output$`q1-answer` <- renderText({
+    output$`q1-answer` <- renderUI({
       if (is.null(input$tab2_answer)) {
-        HTML("Please go to the 'A/B Test' to select your answer")
+        h4("Please go to the 'A/B Test' to select your answer")
       } else {
-        HTML(sprintf(
+        h4(sprintf(
           "Your have selected %s", dQuote(input$tab2_answer)
         ))
       }
     })
     
-    output$`q2-answer` <- renderText({
-      if (is.null(input$tab3_answer)) {
-        HTML("Please go back the 'A/B Test' to select your answer")
-      } else {
-        HTML(sprintf(
-          "Your have selected %s", dQuote(input$tab3_answer)
-        ))
-      }
-      
+    output$`q2-answer` <- renderUI({
+      h4(sprintf(
+        "Your have selected %s", dQuote(input$tab3_answer)
+      ))
     })
 })
