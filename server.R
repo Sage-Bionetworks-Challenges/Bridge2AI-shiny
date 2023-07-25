@@ -26,12 +26,14 @@ shinyServer(function(input, output, session) {
     
     # Login to synapse
     syn$login(authToken = access_token, rememberMe = FALSE)
-
+    
+    user <- syn$getUserProfile(syn$username)
+    
     output$user <- renderUser({
       dashboardUser(
-        name = "Awesome user",
+        name = paste0(user$firstName, " ", user$lastName),
         image = "https://img.icons8.com/?size=512&id=39084&format=png",
-        subtitle = "@awesome-user",
+        subtitle = paste0("@", user$userName),
         tags$div(
           id = "team",
           class = "icon-button",
