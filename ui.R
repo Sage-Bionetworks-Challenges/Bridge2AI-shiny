@@ -26,6 +26,7 @@ ui <- dashboardPage(
       tags$script(htmlwidgets::JS("var step_1_value = 0; var step_2_value = 0; var step_3_value = 0; var step_4_value = 0;"))
     ),
     useShinyjs(),
+    use_notiflix_report(width = "400px"),
     autoWaiter(
       color = transparent(0),
       html = div(

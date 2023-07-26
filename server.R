@@ -148,27 +148,33 @@ shinyServer(function(input, output, session) {
           "")
       )
       
-      tryCatch(
+      res <- tryCatch(
         {
-          table <- submit_response(syn, res_syn_id, response)
-          # HTML(sprintf(
-          #   "Thank you for submitting! You can view your response ",
-          #   "<a href='https://www.synapse.org/#!Synapse:%s' _target = 'blank'>here</a>.",
-          #   prod_syn_id
-          # ))
-          shiny::showNotification(
-            "Thank you for submitting!",
-            type = "message",
-            duration = 5
+          table <- submit_response(admin_syn, res_syn_id, response)
+          list(
+            status = 1L,
+            message = HTML(
+              sprintf(
+                "Thank you for submitting! You can view your response <a href='https://www.synapse.org/#!Synapse:%s' _target = 'blank'>here</a>",
+                prod_syn_id
+              ))
           )
+          
         }, 
-        error = function(e) e
-          shiny::showNotification(
-            e,
-            type = "error",
-            duration = 5
+        error = function(e) {
+          list(
+            status = 0L,
+            message = e
           )
-        )
+        })
+        
+        if (res$status > 0) {
+          shinypop::nx_report_success("Success!", res$message)
+        } else {
+          shinypop::nx_report_error("Submission failed", res$message)
+        }
+        
+    
     })
     
     

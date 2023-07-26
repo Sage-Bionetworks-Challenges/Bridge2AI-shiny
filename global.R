@@ -5,6 +5,7 @@ suppressPackageStartupMessages({
   library(jsonlite)
   library(shiny)
   library(shinyjs)
+  library(shinypop)
   library(sass)
   library(shinydashboard)
   library(shinydashboardPlus)
@@ -99,9 +100,9 @@ syn <- synapse$Synapse()
 
 # Log in to admin client for uploading user's response
 admin_syn <- synapse$Synapse()
-admin_syn$login(email = admin_username, authToken = admin_authtoken, rememberMe = FALSE)
+admin_syn$login(email = admin_username, authToken = admin_authtoken, rememberMe = FALSE, silent = TRUE)
 
 # Vars
-prod_syn_id <- "syn52148684"
+prod_syn_id <- "syn52148683"
 staging_syn_id <- "syn52148685"
 res_syn_id <- "syn52160088"

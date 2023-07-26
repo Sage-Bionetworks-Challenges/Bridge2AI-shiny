@@ -907,6 +907,24 @@
       ],
       "Hash": "802e4786b353a4bb27116957558548d5"
     },
+    "shinypop": {
+      "Package": "shinypop",
+      "Version": "0.1.1",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "dreamRs",
+      "RemoteRepo": "shinypop",
+      "RemoteRef": "master",
+      "RemoteSha": "7745a0b1ecf31f783fa59603f3c5cede0c948118",
+      "Requirements": [
+        "R",
+        "htmltools",
+        "jsonlite",
+        "shiny"
+      ],
+      "Hash": "ee29555190ce6a726046a5909cc91d9b"
+    },
     "sourcetools": {
       "Package": "sourcetools",
       "Version": "0.1.7-1",
