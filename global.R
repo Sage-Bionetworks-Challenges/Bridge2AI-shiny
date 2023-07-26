@@ -87,5 +87,19 @@ system("chmod -R +x .venv")
 Sys.unsetenv("RETICULATE_PYTHON")
 reticulate::use_virtualenv(file.path(getwd(), ".venv"), required = TRUE)
 
-# import synapse client
-syn <- import("synapseclient")$Synapse()
+# Laod all functions
+funcs <- list.files("functions", pattern = "*\\.R$", recursive = TRUE, full.names = TRUE)
+sapply(funcs, FUN = source)
+
+# Import synapse client
+synapse <- reticulate::import("synapseclient")
+syn <- synapse$Synapse()
+
+# Log in to admin client for uploading user's response
+admin_syn <- synapse$Synapse(configPath = ".admin_synapse_config")
+admin_syn$login(rememberMe = FALSE)
+
+# Vars
+prod_syn_id <- "syn52148684"
+staging_syn_id <- "syn52148685"
+res_syn_id <- "syn52160088"

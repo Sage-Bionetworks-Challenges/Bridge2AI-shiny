@@ -74,24 +74,24 @@ shinyServer(function(input, output, session) {
     output$`tab3-plot` <- renderPlot({
       ggplot(diamonds, aes(x = carat, y = price, color = color)) +
         geom_point() +
-        scale_color_manual(values = as.character(ggsci:::ggsci_db[[input$tab3_answer]][[1]])) +
+        scale_color_manual(values = as.character(ggsci:::ggsci_db[[input$q2_answer]][[1]])) +
         labs(x = "Carat", y = "Price") +
         plot_theme
     })
     
-    output$`q1-answer` <- renderUI({
-      if (is.null(input$tab2_answer)) {
+    output$`q1-answer-text` <- renderUI({
+      if (is.null(input$q1_answer)) {
         h4("🚫 Please choose your preferred option in the 'A/B Test'", class = "error")
       } else {
         strong(h4(sprintf(
-          "🎉  Woo-hoo! You've chosen option %s", dQuote(input$tab2_answer)
+          "🎉  Woo-hoo! You've chosen option %s", dQuote(input$q1_answer)
         )))
       }
     })
     
-    output$`q2-answer` <- renderUI({
+    output$`q2-answer-text` <- renderUI({
       strong(h4(sprintf(
-        "🎉  Woo-hoo! You've chosen option %s", dQuote(input$tab3_answer)
+        "🎉  Woo-hoo! You've chosen option %s", dQuote(input$q2_answer)
       )))
     })
     
@@ -115,7 +115,7 @@ shinyServer(function(input, output, session) {
       updateTabsetPanel(session, "tabs", selected = "tab2")
     })
     observeEvent(input$`next-btn-2`, {
-      if (!is.null(input$tab2_answer)) {
+      if (!is.null(input$q1_answer)) {
         addClass("step-2", "complete-step")
         updateTabsetPanel(session, "tabs", selected = "tab3")
       } else {
@@ -126,21 +126,49 @@ shinyServer(function(input, output, session) {
         )
       }
     })
-    observeEvent(input$tab2_answer, ignoreNULL = FALSE, {
-      if(is.null(input$tab2_answer)) removeClass("step-2", "complete-step")
+    observeEvent(input$q1_answer, ignoreNULL = FALSE, {
+      if(is.null(input$q1_answer)) removeClass("step-2", "complete-step")
     })
     
     observeEvent(input$`next-btn-3`, {
-      req(input$tab3_answer)
+      req(input$q2_answer)
       addClass("step-3", "complete-step")
       updateTabsetPanel(session, "tabs", selected = "tab4")
     })
+    
     observeEvent(input$`submit-btn`, {
-      shiny::showNotification(
-        "Submission is not supported yet ~",
-        type = "message",
-        duration = 5
+      req(input$q1_answer)
+      req(input$q2_answer)
+      
+      response <- list(
+        c(user$ownerId, 
+          round(as.numeric(Sys.time()) * 1000), 
+          input$q1_answer, 
+          input$q2_answer, 
+          "")
       )
+      
+      tryCatch(
+        {
+          table <- submit_response(syn, res_syn_id, response)
+          # HTML(sprintf(
+          #   "Thank you for submitting! You can view your response ",
+          #   "<a href='https://www.synapse.org/#!Synapse:%s' _target = 'blank'>here</a>.",
+          #   prod_syn_id
+          # ))
+          shiny::showNotification(
+            "Thank you for submitting!",
+            type = "message",
+            duration = 5
+          )
+        }, 
+        error = function(e) e
+          shiny::showNotification(
+            e,
+            type = "error",
+            duration = 5
+          )
+        )
     })
     
     
@@ -151,8 +179,8 @@ shinyServer(function(input, output, session) {
                 window.scrollTo(0,document.body.scrollHeight);
             }, 200);")
       runjs("var is_a = $('#option-a-box').hasClass('selected'); 
-         if (is_a) Shiny.onInputChange('tab2_answer', 'A')
-         else Shiny.onInputChange('tab2_answer', null);")
+         if (is_a) Shiny.onInputChange('q1_answer', 'A')
+         else Shiny.onInputChange('q1_answer', null);")
     })
     
     onevent("click", "option-b-box", {
@@ -162,8 +190,8 @@ shinyServer(function(input, output, session) {
                 window.scrollTo(0,document.body.scrollHeight);
             }, 200);")
       runjs("var is_b = $('#option-b-box').hasClass('selected'); 
-         if (is_b) Shiny.onInputChange('tab2_answer', 'B')
-         else Shiny.onInputChange('tab2_answer', null);")
+         if (is_b) Shiny.onInputChange('q1_answer', 'B')
+         else Shiny.onInputChange('q1_answer', null);")
     })
-
+    
 })

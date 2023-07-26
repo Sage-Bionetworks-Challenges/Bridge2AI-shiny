@@ -167,11 +167,8 @@ ui <- dashboardPage(
             column(
               width = 10,
               align = "center",
-              radioButtons("tab3_answer", label = "\n", inline = TRUE,
+              radioButtons("q2_answer", label = "\n", inline = TRUE,
                            choices = names(ggsci:::ggsci_db))
-              # br(),
-              # h4("Question 2:"),
-              # colourpicker::colourInput("col", label = "\n", closeOnClick = TRUE),
             ),
             column(width = 1)
           ),
@@ -194,7 +191,7 @@ ui <- dashboardPage(
               width = 10,
               tagList(
                 h5("Which plot is more visually appealing, A or B?", class = "grey"),
-                uiOutput("q1-answer", class = "answer-text"),
+                uiOutput("q1-answer-text", class = "answer-text"),
               )
             )
           ),
@@ -204,7 +201,7 @@ ui <- dashboardPage(
               width = 10,
               br(), br(),
               h5("Pick the perfect palettes to color scatter plot:", class = "grey"),
-              uiOutput("q2-answer", class = "answer-text")
+              uiOutput("q2-answer-text", class = "answer-text")
             )
           ),
           br(), br(),
