@@ -20,6 +20,8 @@ stopifnot(
   !is.null(client_id <- Sys.getenv("CLIENT_ID")) && nchar(client_id) > 0,
   !is.null(client_secret <- Sys.getenv("CLIENT_SECRET")) && nchar(client_secret) > 0,
   !is.null(app_url <- Sys.getenv("APP_URL")) && nchar(app_url) > 0
+  !is.null(admin_username <- Sys.getenv("ADMIN_SYNAPSE_USERNAME")) && nchar(admin_username) > 0
+  !is.null(admin_authtoken <- Sys.getenv("ADMIN_SYNAPSE_AUTHTOKEN")) && nchar(admin_authtoken) > 0
 )
 
 # update port if running app locally
@@ -96,8 +98,8 @@ synapse <- reticulate::import("synapseclient")
 syn <- synapse$Synapse()
 
 # Log in to admin client for uploading user's response
-admin_syn <- synapse$Synapse(configPath = ".admin_synapse_config")
-admin_syn$login(rememberMe = FALSE)
+admin_syn <- synapse$Synapse()
+admin_syn$login(email = admin_username, authToken = admin_authtoken, rememberMe = FALSE)
 
 # Vars
 prod_syn_id <- "syn52148684"

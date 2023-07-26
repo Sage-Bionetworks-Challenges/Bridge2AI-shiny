@@ -45,7 +45,8 @@ jobs:
           echo "CLIENT_ID=${{ secrets.OAUTH_CLIENT_ID }}" >> .env
           echo "CLIENT_SECRET=${{ secrets.OAUTH_CLIENT_SECRET }}" >> .env
           echo "APP_URL=https://${{secrets.RSCONNECT_USER}}.shinyapps.io/${{ env.TEST_APP_NAME }}" >> .env
-          echo "${{secrets.ADMIN_SYNAPSE_CONFIG}}" > .admin_synapse_config
+          echo "ADMIN_SYNAPSE_USERNAME=${{ secrets.ADMIN_SYNAPSE_USERNAME }}" >> .env
+          echo "ADMIN_SYNAPSE_AUTHTOKEN=${{ secrets.ADMIN_SYNAPSE_AUTHTOKEN }}" >> .env
 
       - name: Deployment App to Staging
         shell: Rscript {0}
