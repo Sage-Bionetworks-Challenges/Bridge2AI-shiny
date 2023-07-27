@@ -110,6 +110,13 @@ shinyServer(function(input, output, session) {
       updateTabsetPanel(session, "tabs", selected = input$tabs)
     })
     
+    tab2_plot_rendered <- reactiveVal(NULL)
+    tab3_plot_rendered <- reactiveVal(NULL)
+    next_btn_2_clicked <- reactiveVal(NULL)
+    next_btn_3_clicked <- reactiveVal(NULL)
+    q1_t <- reactiveVal(NULL)
+    q2_t <- reactiveVal(NULL)
+    
     observeEvent(input$`next-btn-1`, {
       addClass("step-1", "complete-step")
       updateTabsetPanel(session, "tabs", selected = "tab2")
@@ -118,6 +125,7 @@ shinyServer(function(input, output, session) {
       if (!is.null(input$q1_answer)) {
         addClass("step-2", "complete-step")
         updateTabsetPanel(session, "tabs", selected = "tab3")
+        next_btn_2_clicked(Sys.time())
       } else {
         shiny::showNotification(
           "Please select an answer!",
@@ -129,16 +137,61 @@ shinyServer(function(input, output, session) {
     observeEvent(input$q1_answer, ignoreNULL = FALSE, {
       if(is.null(input$q1_answer)) removeClass("step-2", "complete-step")
     })
+    observeEvent(input$q2_answer, ignoreNULL = FALSE, {
+      if(is.null(input$q2_answer)) removeClass("step-3", "complete-step")
+    })
     
     observeEvent(input$`next-btn-3`, {
       req(input$q2_answer)
       addClass("step-3", "complete-step")
       updateTabsetPanel(session, "tabs", selected = "tab4")
+      next_btn_3_clicked(Sys.time())
+    })
+    
+    # Record the timestamp when the second plot is initially rendered
+    tab2_count <- reactiveVal(0)
+    tab3_count <- reactiveVal(0)
+
+    onevent("mouseenter", "option-a-box", {
+      if (tab2_count() == 0) {
+        tab2_plot_rendered(Sys.time())
+        tab2_count(tab2_count() + 1)
+      }
+    })
+    onevent("mouseenter", "option-b-box", {
+      if (tab2_count() == 0) {
+        tab2_plot_rendered(Sys.time())
+        tab2_count(tab2_count() + 1)
+      }
+    })
+    onevent("mouseenter", "q2_answer", {
+      if (tab3_count() == 0) {
+        tab3_plot_rendered(Sys.time())
+        tab3_count(tab3_count() + 1)
+      }
+    })
+
+    # Receive the timestamps from JavaScript and calculate the time difference
+    observe({
+      req(tab2_plot_rendered())
+      req(next_btn_2_clicked())
+      req(next_btn_2_clicked() > tab2_plot_rendered())
+      response_t <- round(difftime(next_btn_2_clicked(), tab2_plot_rendered(), units = "secs"), 10)
+      q1_t(as.double(response_t))
+    })
+    observe({
+      req(input$q2_answer)
+      req(next_btn_3_clicked())
+      req(next_btn_3_clicked() > tab3_plot_rendered())
+      response_t <- round(difftime(next_btn_3_clicked(), tab3_plot_rendered(), units = "secs"), 10)
+      q2_t(as.double(response_t))
     })
     
     observeEvent(input$`submit-btn`, {
       req(input$q1_answer)
       req(input$q2_answer)
+      req(q1_t())
+      req(q2_t())
       
       w <- Waiter$new(
         id = "submit-btn", 
@@ -148,13 +201,15 @@ shinyServer(function(input, output, session) {
       )
        
       w$show()
-      Sys.sleep(100)
       disable("submit-btn")
+      
       response <- list(
         c(user$ownerId,
           round(as.numeric(Sys.time()) * 1000),
           input$q1_answer,
           input$q2_answer,
+          q1_t(),
+          q2_t(),
           "")
       )
 
