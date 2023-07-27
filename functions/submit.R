@@ -1,3 +1,17 @@
+has_submitted <- function(submitterid) {
+
+  end_of_today_utc <- floor_date(now(tz = 'UTC'), unit = "day") - seconds(1)
+  time_epoch <- round(as.numeric(end_of_today_utc) * 1000)
+  
+  res <- syn$tableQuery(sprintf("select * from %s where createdOn > %s", res_syn_id, time_epoch))
+  res <- res$asDataFrame()
+  
+  submitters <- as.character(res$submitterid)
+  
+  return(submitterid %in% submitters)
+}
+
+
 submit_response <- function(syn, table_id, response) {
 
   schema <- syn$get(table_id)
