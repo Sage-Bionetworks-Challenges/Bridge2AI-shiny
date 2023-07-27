@@ -51,4 +51,5 @@ rsconnect/
 # Others
 .env
 .venv
-oauth_config.yaml
+.admin_synapse_config
+*.csv

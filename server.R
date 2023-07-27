@@ -74,24 +74,24 @@ shinyServer(function(input, output, session) {
     output$`tab3-plot` <- renderPlot({
       ggplot(diamonds, aes(x = carat, y = price, color = color)) +
         geom_point() +
-        scale_color_manual(values = as.character(ggsci:::ggsci_db[[input$tab3_answer]][[1]])) +
+        scale_color_manual(values = as.character(ggsci:::ggsci_db[[input$q2_answer]][[1]])) +
         labs(x = "Carat", y = "Price") +
         plot_theme
     })
     
-    output$`q1-answer` <- renderUI({
-      if (is.null(input$tab2_answer)) {
+    output$`q1-answer-text` <- renderUI({
+      if (is.null(input$q1_answer)) {
         h4("🚫 Please choose your preferred option in the 'A/B Test'", class = "error")
       } else {
         strong(h4(sprintf(
-          "🎉  Woo-hoo! You've chosen option %s", dQuote(input$tab2_answer)
+          "🎉  Woo-hoo! You've chosen option %s", dQuote(input$q1_answer)
         )))
       }
     })
     
-    output$`q2-answer` <- renderUI({
+    output$`q2-answer-text` <- renderUI({
       strong(h4(sprintf(
-        "🎉  Woo-hoo! You've chosen option %s", dQuote(input$tab3_answer)
+        "🎉  Woo-hoo! You've chosen option %s", dQuote(input$q2_answer)
       )))
     })
     
@@ -110,14 +110,22 @@ shinyServer(function(input, output, session) {
       updateTabsetPanel(session, "tabs", selected = input$tabs)
     })
     
+    tab2_plot_rendered <- reactiveVal(NULL)
+    tab3_plot_rendered <- reactiveVal(NULL)
+    next_btn_2_clicked <- reactiveVal(NULL)
+    next_btn_3_clicked <- reactiveVal(NULL)
+    q1_t <- reactiveVal(NULL)
+    q2_t <- reactiveVal(NULL)
+    
     observeEvent(input$`next-btn-1`, {
       addClass("step-1", "complete-step")
       updateTabsetPanel(session, "tabs", selected = "tab2")
     })
     observeEvent(input$`next-btn-2`, {
-      if (!is.null(input$tab2_answer)) {
+      if (!is.null(input$q1_answer)) {
         addClass("step-2", "complete-step")
         updateTabsetPanel(session, "tabs", selected = "tab3")
+        next_btn_2_clicked(Sys.time())
       } else {
         shiny::showNotification(
           "Please select an answer!",
@@ -126,21 +134,126 @@ shinyServer(function(input, output, session) {
         )
       }
     })
-    observeEvent(input$tab2_answer, ignoreNULL = FALSE, {
-      if(is.null(input$tab2_answer)) removeClass("step-2", "complete-step")
+    observeEvent(c(input$q1_answer, input$q2_answer), ignoreNULL = FALSE, {
+      has_response_q1 <- !is.null(input$q1_answer)
+      has_response_q2 <- !is.null(input$q2_answer)
+      if (!has_response_q1) removeClass("step-2", "complete-step")
+      if (!has_response_q2) removeClass("step-3", "complete-step")
+      if (has_response_q1 && has_response_q2) shinyjs::show("submit-btn") else shinyjs::hide("submit-btn")
     })
     
     observeEvent(input$`next-btn-3`, {
-      req(input$tab3_answer)
+      req(input$q2_answer)
       addClass("step-3", "complete-step")
       updateTabsetPanel(session, "tabs", selected = "tab4")
+      next_btn_3_clicked(Sys.time())
     })
+    
+    # Record the timestamp when the second plot is initially rendered
+    tab2_count <- reactiveVal(0)
+    tab3_count <- reactiveVal(0)
+
+    onevent("mouseenter", "option-a-box", {
+      if (tab2_count() == 0) {
+        tab2_plot_rendered(Sys.time())
+        tab2_count(tab2_count() + 1)
+      }
+    })
+    onevent("mouseenter", "option-b-box", {
+      if (tab2_count() == 0) {
+        tab2_plot_rendered(Sys.time())
+        tab2_count(tab2_count() + 1)
+      }
+    })
+    onevent("mouseenter", "q2_answer", {
+      if (tab3_count() == 0) {
+        tab3_plot_rendered(Sys.time())
+        tab3_count(tab3_count() + 1)
+      }
+    })
+
+    # Receive the timestamps from JavaScript and calculate the time difference
+    observe({
+      req(tab2_plot_rendered())
+      req(next_btn_2_clicked())
+      req(next_btn_2_clicked() > tab2_plot_rendered())
+      response_t <- round(difftime(next_btn_2_clicked(), tab2_plot_rendered(), units = "secs"), 10)
+      q1_t(as.double(response_t))
+    })
+    observe({
+      req(input$q2_answer)
+      req(next_btn_3_clicked())
+      req(next_btn_3_clicked() > tab3_plot_rendered())
+      response_t <- round(difftime(next_btn_3_clicked(), tab3_plot_rendered(), units = "secs"), 10)
+      q2_t(as.double(response_t))
+    })
+    
+    shinyjs::hide("submit-loading-text") # hide loading text initially
     observeEvent(input$`submit-btn`, {
-      shiny::showNotification(
-        "Submission is not supported yet ~",
-        type = "message",
-        duration = 5
+      req(input$q1_answer)
+      req(input$q2_answer)
+      req(q1_t())
+      req(q2_t())
+      
+      # initiate a loading overlay
+      w <- Waiter$new(
+        id = "submit-btn", 
+        color = "black", 
+        html = div(class = "submit-btn-waiter", spin_wave()),
+        fadeout = 200
       )
+      
+      w$show()
+      shinyjs::show("submit-loading-text")
+      disable("submit-btn") # disable button to prevent from over clicking
+      
+  
+      if (has_submitted(user$ownerId, res_syn_id)) {
+        shinypop::nx_report_warning("Whoops", "Only one submission per day :)")
+      } else {
+        
+        response <- list(
+          c(user$ownerId,
+            round(as.numeric(Sys.time()) * 1000),
+            input$q1_answer,
+            input$q2_answer,
+            q1_t(),
+            q2_t(),
+            "")
+        )
+  
+        res <- tryCatch(
+          {
+            table <- submit_response(admin_syn, res_syn_id, response)
+            list(
+              status = 1L,
+              message = HTML(
+                sprintf(
+                  "Thank you for submitting! You can view your response <a href='https://www.synapse.org/#!Synapse:%s' _target = 'blank'>here</a>",
+                  res_syn_id
+                ))
+            )
+  
+          },
+          error = function(e) {
+            list(
+              status = 0L,
+              message = e
+            )
+          }
+        )
+  
+        if (res$status > 0) {
+          shinypop::nx_report_success("Success!", res$message)
+        } else {
+          shinypop::nx_report_error("Submission failed", res$message)
+        }
+    
+      }
+      
+      enable("submit-btn")
+      w$hide()
+      shinyjs::hide("submit-loading-text")
     })
     
     
@@ -151,8 +264,8 @@ shinyServer(function(input, output, session) {
                 window.scrollTo(0,document.body.scrollHeight);
             }, 200);")
       runjs("var is_a = $('#option-a-box').hasClass('selected'); 
-         if (is_a) Shiny.onInputChange('tab2_answer', 'A')
-         else Shiny.onInputChange('tab2_answer', null);")
+         if (is_a) Shiny.onInputChange('q1_answer', 'A')
+         else Shiny.onInputChange('q1_answer', null);")
     })
     
     onevent("click", "option-b-box", {
@@ -162,8 +275,8 @@ shinyServer(function(input, output, session) {
                 window.scrollTo(0,document.body.scrollHeight);
             }, 200);")
       runjs("var is_b = $('#option-b-box').hasClass('selected'); 
-         if (is_b) Shiny.onInputChange('tab2_answer', 'B')
-         else Shiny.onInputChange('tab2_answer', null);")
+         if (is_b) Shiny.onInputChange('q1_answer', 'B')
+         else Shiny.onInputChange('q1_answer', null);")
     })
-
+    
 })
