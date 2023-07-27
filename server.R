@@ -134,11 +134,12 @@ shinyServer(function(input, output, session) {
         )
       }
     })
-    observeEvent(input$q1_answer, ignoreNULL = FALSE, {
-      if(is.null(input$q1_answer)) removeClass("step-2", "complete-step")
-    })
-    observeEvent(input$q2_answer, ignoreNULL = FALSE, {
-      if(is.null(input$q2_answer)) removeClass("step-3", "complete-step")
+    observeEvent(c(input$q1_answer, input$q2_answer), ignoreNULL = FALSE, {
+      has_response_q1 <- !is.null(input$q1_answer)
+      has_response_q2 <- !is.null(input$q2_answer)
+      if (!has_response_q1) removeClass("step-2", "complete-step")
+      if (!has_response_q2) removeClass("step-3", "complete-step")
+      if (has_response_q1 && has_response_q2) shinyjs::show("submit-btn") else shinyjs::hide("submit-btn")
     })
     
     observeEvent(input$`next-btn-3`, {
@@ -186,6 +187,7 @@ shinyServer(function(input, output, session) {
       response_t <- round(difftime(next_btn_3_clicked(), tab3_plot_rendered(), units = "secs"), 10)
       q2_t(as.double(response_t))
     })
+    
     
     observeEvent(input$`submit-btn`, {
       req(input$q1_answer)
