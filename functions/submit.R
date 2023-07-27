@@ -1,9 +1,9 @@
-has_submitted <- function(submitterid) {
+has_submitted <- function(submitterid, table_id) {
 
   end_of_today_utc <- floor_date(now(tz = 'UTC'), unit = "day") - seconds(1)
   time_epoch <- round(as.numeric(end_of_today_utc) * 1000)
   
-  res <- syn$tableQuery(sprintf("select * from %s where createdOn > %s", res_syn_id, time_epoch))
+  res <- syn$tableQuery(sprintf("select * from %s where createdOn > %s", table_id, time_epoch))
   res <- res$asDataFrame()
   
   submitters <-  setdiff("3417574", as.character(res$submitterid))

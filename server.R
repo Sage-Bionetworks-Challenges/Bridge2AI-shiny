@@ -193,7 +193,7 @@ shinyServer(function(input, output, session) {
       req(q1_t())
       req(q2_t())
       
-      if (has_submitted(user$ownerId)) {
+      if (has_submitted(user$ownerId, res_syn_id)) {
         shinypop::nx_report_warning("Whoops", "Only one submission per day :)")
       } else {
         w <- Waiter$new(
