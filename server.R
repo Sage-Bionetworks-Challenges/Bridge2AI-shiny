@@ -140,14 +140,24 @@ shinyServer(function(input, output, session) {
       req(input$q1_answer)
       req(input$q2_answer)
       
+      w <- Waiter$new(
+        id = "submit-btn", 
+        color = "black", 
+        html = div(class = "submit-btn-waiter", spin_wave()),
+        fadeout = 200
+      )
+       
+      w$show()
+      Sys.sleep(100)
+      disable("submit-btn")
       response <- list(
-        c(user$ownerId, 
-          round(as.numeric(Sys.time()) * 1000), 
-          input$q1_answer, 
-          input$q2_answer, 
+        c(user$ownerId,
+          round(as.numeric(Sys.time()) * 1000),
+          input$q1_answer,
+          input$q2_answer,
           "")
       )
-      
+
       res <- tryCatch(
         {
           table <- submit_response(admin_syn, res_syn_id, response)
@@ -159,22 +169,23 @@ shinyServer(function(input, output, session) {
                 prod_syn_id
               ))
           )
-          
-        }, 
+
+        },
         error = function(e) {
           list(
             status = 0L,
             message = e
           )
         })
-        
+
         if (res$status > 0) {
           shinypop::nx_report_success("Success!", res$message)
         } else {
           shinypop::nx_report_error("Submission failed", res$message)
         }
-        
-    
+      
+        enable("submit-btn")
+        w$hide()
     })
     
     

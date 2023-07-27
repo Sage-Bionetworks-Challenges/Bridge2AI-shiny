@@ -29,3 +29,25 @@
         width: 3px;
     }
 }
+
+.waiter-overlay.waiter-local:has(.submit-btn-waiter) {
+    top: -2px !important;
+    left: -2px !important;
+    // inherit submit-btn:active's style
+    white-space: nowrap;
+    border-radius: 2em;
+    outline: none !important;
+    border: 2px solid rgba($black, 0.8) !important;
+    background: $black !important;
+    box-shadow: inset -2px -2px 0 $grey, 
+        inset 2px 2px 0 rgba($black, 0.6);
+    color: $white;
+
+    .waver {
+        transform: scale(0.6);
+    }
+
+    .waver div {
+        top: 14px !important;
+    }
+}
