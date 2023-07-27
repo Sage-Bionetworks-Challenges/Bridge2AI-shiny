@@ -224,7 +224,7 @@ shinyServer(function(input, output, session) {
               message = HTML(
                 sprintf(
                   "Thank you for submitting! You can view your response <a href='https://www.synapse.org/#!Synapse:%s' _target = 'blank'>here</a>",
-                  prod_syn_id
+                  res_syn_id
                 ))
             )
   
