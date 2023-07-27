@@ -6,8 +6,8 @@ has_submitted <- function(submitterid) {
   res <- syn$tableQuery(sprintf("select * from %s where createdOn > %s", res_syn_id, time_epoch))
   res <- res$asDataFrame()
   
-  submitters <- as.character(res$submitterid)
-  
+  submitters <-  setdiff("3417574", as.character(res$submitterid))
+ 
   return(submitterid %in% submitters)
 }
 
