@@ -193,18 +193,19 @@ shinyServer(function(input, output, session) {
       req(q1_t())
       req(q2_t())
       
+      w <- Waiter$new(
+        id = "submit-btn", 
+        color = "black", 
+        html = div(class = "submit-btn-waiter", spin_wave()),
+        fadeout = 200
+      )
+      
+      w$show()
+      disable("submit-btn")
+      
       if (has_submitted(user$ownerId, res_syn_id)) {
         shinypop::nx_report_warning("Whoops", "Only one submission per day :)")
       } else {
-        w <- Waiter$new(
-          id = "submit-btn", 
-          color = "black", 
-          html = div(class = "submit-btn-waiter", spin_wave()),
-          fadeout = 200
-        )
-         
-        w$show()
-        disable("submit-btn")
         
         response <- list(
           c(user$ownerId,
@@ -234,17 +235,19 @@ shinyServer(function(input, output, session) {
               status = 0L,
               message = e
             )
-          })
-  
-          if (res$status > 0) {
-            shinypop::nx_report_success("Success!", res$message)
-          } else {
-            shinypop::nx_report_error("Submission failed", res$message)
           }
-        
-          enable("submit-btn")
-          w$hide()
+        )
+  
+        if (res$status > 0) {
+          shinypop::nx_report_success("Success!", res$message)
+        } else {
+          shinypop::nx_report_error("Submission failed", res$message)
+        }
+    
       }
+      
+      enable("submit-btn")
+      w$hide()
     })
     
     
