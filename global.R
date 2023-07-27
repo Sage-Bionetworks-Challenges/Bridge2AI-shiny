@@ -77,12 +77,12 @@ api <- oauth_endpoint(
 scope <- "openid view download modify"
 
 ## Set Up Virtual Environment
-# ShinyAppys has a limit of 7000 files which this app' grossly exceeds
-# due to its Python dependencies.  To get around the limit we zip up
-# the virtual environment before deployment and unzip it here.
+# ShinyAppys has a limit of 7000 files. To get around the limit we zip up
+# the large folders before deployment and unzip it here.
 
-# unzip virtual environment, named as ".venv.zip"
+# unzip ".venv.zip" and "renv.zip"
 if (!file.exists(".venv")) utils::unzip(".venv.zip")
+if (!file.exists("renv")) utils::unzip("renv.zip")
 
 # We get a '126' error (non-executable) if we don't do this:
 system("chmod -R +x .venv")

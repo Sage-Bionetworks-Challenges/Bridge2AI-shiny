@@ -48,6 +48,13 @@ jobs:
           echo "ADMIN_SYNAPSE_USERNAME=${{ secrets.ADMIN_SYNAPSE_USERNAME }}" >> .env
           echo "ADMIN_SYNAPSE_AUTHTOKEN=${{ secrets.ADMIN_SYNAPSE_AUTHTOKEN }}" >> .env
 
+      - name: zip virtual env
+        # ShinyApps has a limit of 7000 files
+        # zip large folders and later unzip it in 'global.R'
+        run: |
+          zip -rm .venv.zip .venv
+          zip -rm renv.zip renv
+
       - name: Deployment App to Staging
         shell: Rscript {0}
         run: |
