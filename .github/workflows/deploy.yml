@@ -39,7 +39,7 @@ jobs:
         run: |
           # has to activate each bash step
           source .venv/bin/activate
-          pip3 install synapseclient
+          pip3 install synapseclient pandas
 
       - name: zip virtual env
         shell: bash
