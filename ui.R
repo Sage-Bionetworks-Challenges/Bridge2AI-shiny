@@ -209,8 +209,9 @@ ui <- dashboardPage(
           fluidRow(
             column(
               width = 12,
-              align = "center",
-              actionButton("submit-btn", "Submit", class = "next-btn")
+              class = "flex-center flex-column",
+              actionButton("submit-btn", "Submit", class = "next-btn"),
+              span(id = "submit-loading-text", class = "dark-grey", "submitting ... please wait")
             )
           )
         )

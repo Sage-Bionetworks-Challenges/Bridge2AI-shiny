@@ -188,13 +188,14 @@ shinyServer(function(input, output, session) {
       q2_t(as.double(response_t))
     })
     
-    
+    shinyjs::hide("submit-loading-text") # hide loading text initially
     observeEvent(input$`submit-btn`, {
       req(input$q1_answer)
       req(input$q2_answer)
       req(q1_t())
       req(q2_t())
       
+      # initiate a loading overlay
       w <- Waiter$new(
         id = "submit-btn", 
         color = "black", 
@@ -203,8 +204,10 @@ shinyServer(function(input, output, session) {
       )
       
       w$show()
-      disable("submit-btn")
+      shinyjs::show("submit-loading-text")
+      disable("submit-btn") # disable button to prevent from over clicking
       
+  
       if (has_submitted(user$ownerId, res_syn_id)) {
         shinypop::nx_report_warning("Whoops", "Only one submission per day :)")
       } else {
@@ -250,6 +253,7 @@ shinyServer(function(input, output, session) {
       
       enable("submit-btn")
       w$hide()
+      shinyjs::hide("submit-loading-text")
     })
     
     
