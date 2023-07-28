@@ -169,7 +169,8 @@ ui <- dashboardPage(
               width = 10,
               align = "center",
               radioButtons("q2_answer", label = "\n", inline = TRUE,
-                           choices = names(ggsci:::ggsci_db))
+                           choices = names(ggsci:::ggsci_db),
+                           selected = character(0))
             ),
             column(width = 1)
           ),

@@ -49,7 +49,7 @@ shinyServer(function(input, output, session) {
     plot_theme <-  
       theme_minimal(base_size = 14) +
       theme(
-        legend.position = c(0.95, 0.4),
+        legend.position = c(0.95, 0.3),
         plot.background = element_rect(fill = "#f5f5f5", color = NA)
       )
     
@@ -72,27 +72,38 @@ shinyServer(function(input, output, session) {
     
     
     output$`tab3-plot` <- renderPlot({
+      
+      if (length(input$q2_answer) > 0)  {
+        pals <- as.character(ggsci:::ggsci_db[[input$q2_answer]][[1]])
+      } else {
+        pals <- rep("#7b7c7e", length(unique(diamonds$color)))
+      }
       ggplot(diamonds, aes(x = carat, y = price, color = color)) +
         geom_point() +
-        scale_color_manual(values = as.character(ggsci:::ggsci_db[[input$q2_answer]][[1]])) +
+        scale_color_manual(values = pals) +
         labs(x = "Carat", y = "Price") +
         plot_theme
     })
     
     output$`q1-answer-text` <- renderUI({
-      if (is.null(input$q1_answer)) {
-        h4("🚫 Please choose your preferred option in the 'A/B Test'", class = "error")
-      } else {
+      if (length(input$q1_answer) > 0) {
         strong(h4(sprintf(
           "🎉  Woo-hoo! You've chosen option %s", dQuote(input$q1_answer)
         )))
+      } else {
+        h4("🚫 Please choose your preferred option in the 'A/B Test'", class = "error")
       }
     })
     
     output$`q2-answer-text` <- renderUI({
-      strong(h4(sprintf(
-        "🎉  Woo-hoo! You've chosen option %s", dQuote(input$q2_answer)
-      )))
+      
+      if (length(input$q2_answer) > 0) {
+        strong(h4(sprintf(
+          "🎉  Woo-hoo! You've chosen option %s", dQuote(input$q2_answer)
+        )))
+      } else {
+        h4("🚫 Please choose your preferred option in the 'Q & A'", class = "error")
+      }
     })
     
     observeEvent(input$tabs, {
@@ -122,7 +133,7 @@ shinyServer(function(input, output, session) {
       updateTabsetPanel(session, "tabs", selected = "tab2")
     })
     observeEvent(input$`next-btn-2`, {
-      if (!is.null(input$q1_answer)) {
+      if (length(input$q1_answer) > 0) {
         addClass("step-2", "complete-step")
         updateTabsetPanel(session, "tabs", selected = "tab3")
         next_btn_2_clicked(Sys.time())
@@ -135,8 +146,8 @@ shinyServer(function(input, output, session) {
       }
     })
     observeEvent(c(input$q1_answer, input$q2_answer), ignoreNULL = FALSE, {
-      has_response_q1 <- !is.null(input$q1_answer)
-      has_response_q2 <- !is.null(input$q2_answer)
+      has_response_q1 <- length(input$q1_answer) > 0
+      has_response_q2 <- length(input$q2_answer) > 0
       if (!has_response_q1) removeClass("step-2", "complete-step")
       if (!has_response_q2) removeClass("step-3", "complete-step")
       if (has_response_q1 && has_response_q2) shinyjs::show("submit-btn") else shinyjs::hide("submit-btn")
@@ -181,7 +192,7 @@ shinyServer(function(input, output, session) {
       q1_t(as.double(response_t))
     })
     observe({
-      req(input$q2_answer)
+      req(length(input$q2_answer) > 0)
       req(next_btn_3_clicked())
       req(next_btn_3_clicked() > tab3_plot_rendered())
       response_t <- round(difftime(next_btn_3_clicked(), tab3_plot_rendered(), units = "secs"), 10)
@@ -190,8 +201,8 @@ shinyServer(function(input, output, session) {
     
     shinyjs::hide("submit-loading-text") # hide loading text initially
     observeEvent(input$`submit-btn`, {
-      req(input$q1_answer)
-      req(input$q2_answer)
+      req(length(input$q1_answer) > 0)
+      req(length(input$q2_answer) > 0)
       req(q1_t())
       req(q2_t())
       
