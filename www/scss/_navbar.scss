@@ -84,6 +84,7 @@ $user-btn-text-color: rgba($black, 0.7);
     
     .user-body {
       @extend .flex-center;
+      @extend .flex-column;
 
       .icon-button {
         text-decoration: underline;
@@ -93,6 +94,5 @@ $user-btn-text-color: rgba($black, 0.7);
         color: $user-btn-text-color !important;
       }
     }
-  
   }
 }

@@ -27,20 +27,27 @@ shinyServer(function(input, output, session) {
     # Login to synapse
     syn$login(authToken = access_token, rememberMe = FALSE)
     
-    user <- syn$getUserProfile(syn$username)
+    # Retrieve user's information
+    user <- syn$getUserProfile()
     
+    challenge <- get_challenge(admin_syn, "syn26720920")
+    teams <- get_user_teams(syn, user$ownerId, challenge$id)
+    teams[[2]] <- teams[[1]]
+
     output$user <- renderUser({
       dashboardUser(
-        name = paste0(user$firstName, " ", user$lastName),
+        name = user$displayName,
         image = "https://img.icons8.com/?size=512&id=39084&format=png",
         subtitle = paste0("@", user$userName),
-        tags$div(
-          id = "team",
-          class = "icon-button",
-          tags$img(src = "https://img.icons8.com/?size=512&id=11901&format=png", height = "32px", width = "32px"),
-          if(TRUE) tags$a("Awesome team", href = "https://www.google.com", target = "_blank")
-        )
-      )
+        if(length(teams) > 0) {
+          purrr::map(teams, ~ {
+            tags$div(
+              class = "icon-button",
+              tags$img(src = "https://img.icons8.com/?size=512&id=11901&format=png", height = "32px", width = "32px"),
+              tags$a(.$name, href = stringr::str_glue("https://www.synapse.org/#!Team:{.$id}"), target = "_blank")
+            )
+        })
+      })
     })
     
     Sys.sleep(2)

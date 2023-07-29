@@ -14,6 +14,7 @@ suppressPackageStartupMessages({
   library(viridis)
   library(ggsci)
   library(lubridate)
+  library(magrittr)
 })
 
 ## Set Up OAuth
