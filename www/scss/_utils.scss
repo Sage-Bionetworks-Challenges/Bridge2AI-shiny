@@ -1,53 +1,55 @@
+.flex {
+  display: flex;
+}
+
 .flex-center {
-    display: flex;
-    justify-content: center;
+  justify-content: center;
+  align-items: center;
+}
+  
+.flex-column {
+  flex-direction: column;  
+}
+  
+.icon-button {
+    display: inline-flex;
     align-items: center;
-  
-  }
-  
-  .flex-column {
-   flex-direction: column;  
-  }
-  
-  .icon-button {
-      display: inline-flex;
-      align-items: center;
-  
-      img {
-          margin-right: 1em;
-      }
-  }
 
-  .float {
-    box-shadow:
-        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
-        0 12.5px 10px rgba(0, 0, 0, 0.06),
-        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
-        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-        0 100px 80px rgba(0, 0, 0, 0.12)
-  }
+    img {
+        margin-right: 1em;
+    }
+}
 
-  .black {
-    color: $black;
-  }
+.float {
+  box-shadow:
+      0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+      0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+      0 12.5px 10px rgba(0, 0, 0, 0.06),
+      0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+      0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+      0 100px 80px rgba(0, 0, 0, 0.12)
+}
 
-  .dark-grey {
-    color: $dark-grey;
-  }
+.black {
+  color: $black;
+}
 
-  .grey {
-    color: $grey;
-  }
+.dark-grey {
+  color: $dark-grey;
+}
 
-  .light-grey {
-    color: $light-grey;
-  }
+.grey {
+  color: $grey;
+}
 
-  .white {
-    color: $white;
-  }
+.light-grey {
+  color: $light-grey;
+}
 
-  .error {
-    color: red;
-  }
+.white {
+  color: $white;
+}
+
+.error {
+  color: red;
+}

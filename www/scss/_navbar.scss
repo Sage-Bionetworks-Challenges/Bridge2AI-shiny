@@ -83,6 +83,8 @@ $user-btn-text-color: rgba($black, 0.7);
     }
     
     .user-body {
+      display: flex;
+      flex-direction: column;
       @extend .flex-center;
 
       .icon-button {
@@ -93,6 +95,5 @@ $user-btn-text-color: rgba($black, 0.7);
         color: $user-btn-text-color !important;
       }
     }
-  
   }
 }

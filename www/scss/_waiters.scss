@@ -12,9 +12,15 @@
     .text2 {
         text-align: right
     }
+
+    span {
+        display: block;
+        text-align: left;
+    }
 }
 
 .plot-waiter {
+    display: flex;
     @extend .flex-center;
     gap: 4px;
     margin: 8px;
@@ -44,6 +50,7 @@
     color: $white;
 
     .waver {
+        height: 2.5em; // match submit-confirm-btn height
         transform: scale(0.6);
     }
 

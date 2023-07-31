@@ -53,3 +53,4 @@ rsconnect/
 .venv
 .admin_synapse_config
 *.csv
+*.png
