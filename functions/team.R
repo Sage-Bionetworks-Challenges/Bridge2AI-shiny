@@ -15,4 +15,3 @@ get_user_teams <- function(syn, user_id, challenge_id) {
   
   return(teams)
 }
-

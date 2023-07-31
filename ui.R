@@ -210,9 +210,8 @@ ui <- dashboardPage(
           fluidRow(
             column(
               width = 12,
-              class = "flex-center flex-column",
-              actionButton("submit-btn", "Submit", class = "next-btn"),
-              span(id = "submit-loading-text", class = "dark-grey", "submitting ... please wait")
+              align = "center",
+              actionButton("submit-btn", "Submit", class = "next-btn")
             )
           )
         )
@@ -220,7 +219,6 @@ ui <- dashboardPage(
     )
   )
 )
-
 
 uiFunc <- function(req) {
     if (!has_auth_code(parseQueryString(req$QUERY_STRING))) {
