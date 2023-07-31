@@ -29,9 +29,11 @@ shinyServer(function(input, output, session) {
 
   # Retrieve user's information
   user <- syn$getUserProfile()
-
+  avatar <- get_user_avatar(syn, user$ownerId)
+  
   challenge <- get_challenge(admin_syn, prod_syn_id)
   teams <- get_user_teams(syn, user$ownerId, challenge$id)
+
   # TODO: replace by participant team with below chunk
   # is_registered <- has_registered(syn, user$ownerId, challenge$id)
   is_registered <- TRUE
@@ -39,7 +41,7 @@ shinyServer(function(input, output, session) {
   output$user <- renderUser({
     dashboardUser(
       name = user$displayName,
-      image = "https://img.icons8.com/?size=512&id=39084&format=png",
+      image = avatar,
       subtitle = paste0("@", user$userName),
       if(length(teams) > 0) {
         purrr::map(teams, ~ {
