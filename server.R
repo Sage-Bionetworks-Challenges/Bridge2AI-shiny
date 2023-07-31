@@ -32,9 +32,6 @@ shinyServer(function(input, output, session) {
 
   challenge <- get_challenge(admin_syn, prod_syn_id)
   teams <- get_user_teams(syn, user$ownerId, challenge$id)
-  test_team <- teams[[1]]
-  test_team$name <- paste0(test_team$name, "2")
-  teams[[2]] <- test_team
   
   output$user <- renderUser({
     dashboardUser(
