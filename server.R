@@ -32,7 +32,9 @@ shinyServer(function(input, output, session) {
 
   challenge <- get_challenge(admin_syn, prod_syn_id)
   teams <- get_user_teams(syn, user$ownerId, challenge$id)
-  is_registered <- has_registered(syn, user$ownerId, challenge$id)
+  # TODO: replace by participant team with below chunk
+  # is_registered <- has_registered(syn, user$ownerId, challenge$id)
+  is_registered <- TRUE
   
   output$user <- renderUser({
     dashboardUser(
@@ -51,7 +53,24 @@ shinyServer(function(input, output, session) {
   })
   
   Sys.sleep(2)
-  waiter_hide()
+  if (is_registered) {
+    waiter_hide()
+  } else {
+    waiter_update(
+      html = div(
+        class = "landing-waiter",
+        tagList(
+          h3(sprintf("Hello %s", user$firstName), class = "text1"),
+          HTML(stringr::str_glue(
+            "<span>
+               Please <a href='https://www.synapse.org/#!Synapse:{prod_syn_id}' target='_blank'>register</a> the challenge and try again.
+             </span>
+            "
+          ))
+        )
+      )
+    )
+  }
   
   plot_theme <-  
     theme_minimal(base_size = 14) +

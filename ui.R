@@ -4,7 +4,7 @@ ui <- dashboardPage(
     title = a(
       "Bridge2AI", 
       class = "logo-title",
-      href="https://www.synapse.org/#!Synapse:syn52148683", 
+      href=stringr::str_glue("https://www.synapse.org/#!Synapse:{prod_syn_id}"), 
       target = "_blank"
     ),
     userOutput("user")
